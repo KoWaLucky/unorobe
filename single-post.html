@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Modish - Clothing eCommerce Free Bootstrap 5 HTML CSS Website Template</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="author" content="">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    <!--Bootstrap ================================================== -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <!--Link Swiper's CSS ================================================== -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+
+    <!-- Style Sheet ================================================== -->
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Google Fonts ================================================== -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Jost:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <!-- svg icon -->
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+
+        <symbol id="man" viewBox="0 0 512 512">
+            <path fill="currentColor"
+                d="M332.64 64.58C313.18 43.57 286 32 256 32c-30.16 0-57.43 11.5-76.8 32.38c-19.58 21.11-29.12 49.8-26.88 80.78C156.76 206.28 203.27 256 256 256s99.16-49.71 103.67-110.82c2.27-30.7-7.33-59.33-27.03-80.6M432 480H80a31 31 0 0 1-24.2-11.13c-6.5-7.77-9.12-18.38-7.18-29.11C57.06 392.94 83.4 353.61 124.8 326c36.78-24.51 83.37-38 131.2-38s94.42 13.5 131.2 38c41.4 27.6 67.74 66.93 76.18 113.75c1.94 10.73-.68 21.34-7.18 29.11A31 31 0 0 1 432 480" />
+        </symbol>
+        <symbol id="search" viewBox="0 0 512 512">
+            <path fill="currentColor"
+                d="M456.69 421.39L362.6 327.3a173.8 173.8 0 0 0 34.84-104.58C397.44 126.38 319.06 48 222.72 48S48 126.38 48 222.72s78.38 174.72 174.72 174.72A173.8 173.8 0 0 0 327.3 362.6l94.09 94.09a25 25 0 0 0 35.3-35.3M97.92 222.72a124.8 124.8 0 1 1 124.8 124.8a124.95 124.95 0 0 1-124.8-124.8" />
+        </symbol>
+        <symbol id="expand" viewBox="0 0 32 32">
+            <path fill="currentColor"
+                d="m25.545 23.328l-7.627-7.705l7.616-7.616l1.857 1.857l2.26-8.428l-8.428 2.258l1.836 1.836l-7.603 7.604l-7.513-7.59L9.81 3.695L1.392 1.394l2.215 8.44l1.848-1.83l7.524 7.604l-7.515 7.515l-1.856-1.855l-2.26 8.427l8.43-2.257L7.94 25.6l7.503-7.502l7.614 7.693l-1.867 1.848l8.416 2.3l-2.213-8.438z" />
+        </symbol>
+        <symbol id="wishlist" viewBox="0 0 512 512">
+            <path fill="currentColor"
+                d="M256 448a32 32 0 0 1-18-5.57c-78.59-53.35-112.62-89.93-131.39-112.8c-40-48.75-59.15-98.8-58.61-153C48.63 114.52 98.46 64 159.08 64c44.08 0 74.61 24.83 92.39 45.51a6 6 0 0 0 9.06 0C278.31 88.81 308.84 64 352.92 64c60.62 0 110.45 50.52 111.08 112.64c.54 54.21-18.63 104.26-58.61 153c-18.77 22.87-52.8 59.45-131.39 112.8a32 32 0 0 1-18 5.56" />
+        </symbol>
+        <symbol id="cart" viewBox="0 0 512 512">
+            <circle cx="176" cy="416" r="32" fill="currentColor" />
+            <circle cx="400" cy="416" r="32" fill="currentColor" />
+            <path fill="currentColor"
+                d="M456.8 120.78a23.92 23.92 0 0 0-18.56-8.78H133.89l-6.13-34.78A16 16 0 0 0 112 64H48a16 16 0 0 0 0 32h50.58l45.66 258.78A16 16 0 0 0 160 368h256a16 16 0 0 0 0-32H173.42l-5.64-32h241.66A24.07 24.07 0 0 0 433 284.71l28.8-144a24 24 0 0 0-5-19.93" />
+        </symbol>
+        <symbol id="play" viewBox="0 0 512 512">
+            <path fill="currentColor" d="m96 448l320-192L96 64z" />
+        </symbol>
+        <symbol id="down" viewBox="0 0 24 24">
+            <g fill="none" fill-rule="evenodd">
+                <path
+                    d="M24 0v24H0V0zM12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.019-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z" />
+                <path fill="currentColor"
+                    d="M13.06 16.06a1.5 1.5 0 0 1-2.12 0l-5.658-5.656a1.5 1.5 0 1 1 2.122-2.121L12 12.879l4.596-4.596a1.5 1.5 0 0 1 2.122 2.12l-5.657 5.658Z" />
+            </g>
+        </symbol>
+        <symbol id="arrow-right" viewBox="0 0 24 24">
+            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="m10 17l5-5l-5-5" />
+        </symbol>
+        <symbol id="arrow-left" viewBox="0 0 24 24">
+            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="m14 7l-5 5l5 5" />
+        </symbol>
+        <symbol id="expand" viewBox="0 0 32 32">
+            <path fill="currentColor"
+                d="m25.545 23.328l-7.627-7.705l7.616-7.616l1.857 1.857l2.26-8.428l-8.428 2.258l1.836 1.836l-7.603 7.604l-7.513-7.59L9.81 3.695L1.392 1.394l2.215 8.44l1.848-1.83l7.524 7.604l-7.515 7.515l-1.856-1.855l-2.26 8.427l8.43-2.257L7.94 25.6l7.503-7.502l7.614 7.693l-1.867 1.848l8.416 2.3l-2.213-8.438z" />
+        </symbol>
+        <symbol id="wishlist" viewBox="0 0 512 512">
+            <path fill="currentColor"
+                d="M256 448a32 32 0 0 1-18-5.57c-78.59-53.35-112.62-89.93-131.39-112.8c-40-48.75-59.15-98.8-58.61-153C48.63 114.52 98.46 64 159.08 64c44.08 0 74.61 24.83 92.39 45.51a6 6 0 0 0 9.06 0C278.31 88.81 308.84 64 352.92 64c60.62 0 110.45 50.52 111.08 112.64c.54 54.21-18.63 104.26-58.61 153c-18.77 22.87-52.8 59.45-131.39 112.8a32 32 0 0 1-18 5.56" />
+        </symbol>
+        <symbol xmlns="http://www.w3.org/2000/svg" id="heart" viewBox="0 0 24 24">
+            <path fill="currentColor"
+                d="M20.16 4.61A6.27 6.27 0 0 0 12 4a6.27 6.27 0 0 0-8.16 9.48l7.45 7.45a1 1 0 0 0 1.42 0l7.45-7.45a6.27 6.27 0 0 0 0-8.87Zm-1.41 7.46L12 18.81l-6.75-6.74a4.28 4.28 0 0 1 3-7.3a4.25 4.25 0 0 1 3 1.25a1 1 0 0 0 1.42 0a4.27 4.27 0 0 1 6 6.05Z" />
+        </symbol>
+    </svg>
+
+    <div class="search-popup">
+        <div class="search-popup-container">
+
+            <form role="search" method="get" class="form-group" action="">
+                <input type="search" id="search-form" class="form-control border-0 border-bottom"
+                    placeholder="Type and press enter" value="" name="s" />
+                <button type="submit" class="search-submit border-0 position-absolute bg-white"
+                    style="top: 15px;right: 15px;"><svg class="search" width="24" height="24">
+                        <use xlink:href="#search"></use>
+                    </svg></button>
+            </form>
+
+            <h5 class="cat-list-title">Browse Categories</h5>
+
+            <ul class="cat-list">
+                <li class="cat-list-item mb-3">
+                    <a href="#" title="Make-Up">Make-Up</a>
+                </li>
+                <li class="cat-list-item mb-3">
+                    <a href="#" title="Skin Care">Skin Care</a>
+                </li>
+                <li class="cat-list-item mb-3">
+                    <a href="#" title="Bath Products">Bath Products</a>
+                </li>
+                <li class="cat-list-item mb-3">
+                    <a href="#" title="Hair">Hair</a>
+                </li>
+                <li class="cat-list-item mb-3">
+                    <a href="#" title="Body Care">Body Care</a>
+                </li>
+                <li class="cat-list-item mb-3">
+                    <a href="#" title="Nails">Nails</a>
+                </li>
+                <li class="cat-list-item mb-3">
+                    <a href="#" title="Tools $ Brushes">Tools $ Brushes</a>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+    <div class="offcanvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id="offcanvasCart"
+        aria-labelledby="My Cart">
+        <div class="offcanvas-header justify-content-center">
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div class="order-md-last">
+                <h4 class="d-flex justify-content-between align-items-center mb-4">
+                    <span class="text-primary">Your cart</span>
+                    <span class="badge bg-primary rounded-circle pt-2">3</span>
+                </h4>
+
+                <ul class="list-group mb-4">
+                    <li class="list-group-item d-flex justify-content-between lh-sm">
+                        <div>
+                            <h6 class="my-0">Red Sunglasses</h6>
+                            <small class="text-body-secondary">Brief description</small>
+                        </div>
+                        <span class="text-body-secondary">$120</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between lh-sm">
+                        <div>
+                            <h6 class="my-0">Reading Glasses</h6>
+                            <small class="text-body-secondary">Brief description</small>
+                        </div>
+                        <span class="text-body-secondary">$80</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between lh-sm">
+                        <div>
+                            <h6 class="my-0">Fashion Glasses</h6>
+                            <small class="text-body-secondary">Brief description</small>
+                        </div>
+                        <span class="text-body-secondary">$50</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span class="fw-bold">Total (USD)</span>
+                        <strong>$250</strong>
+                    </li>
+                </ul>
+
+                <button class="w-100 btn btn-dark" type="submit">Continue to checkout</button>
+            </div>
+        </div>
+    </div>
+    <header class="position-absolute top-0 start-0 w-100 z-1">
+        <nav class="navbar navbar-expand-lg navbar-light pt-4">
+            <div class="container-fluid align-items-center align-items-lg-start mx-lg-5">
+
+                <a class="navbar-brand" href="index.html"><img src="images/logo.png" alt="logo" class="img-fluid"></a>
+                <button class="navbar-toggler shadow-none" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="d-flex d-lg-none list-unstyled mt-3">
+                        <div class="login me-3 align-items-center">
+                            <li><a class="nav-link nav-link-ltr" href="account.html"><svg class="man" width="15"
+                                        height="15">
+                                        <use xlink:href="#man"></use>
+                                    </svg> &nbsp; LOGIN</a></li>
+                        </div>
+                        <div class="search me-3 ">
+                            <li class="search-box"><a class="nav-link nav-link-ltr search-button" href="#"><svg
+                                        class="search" width="15" height="15">
+                                        <use xlink:href="#search"></use>
+                                    </svg> &nbsp; SEARCH</a></li>
+                        </div>
+                        <div class="wish me-3 ">
+                            <li><a class="nav-link nav-link-ltr" href="wishlist.html"><svg class="wishlist" width="15"
+                                        height="15">
+                                        <use xlink:href="#wishlist"></use>
+                                    </svg> &nbsp; (0)</a></li>
+                        </div>
+                        <div class="cart me-3 ">
+                            <li><a class="nav-link nav-link-ltr" href="#"><svg class="cart" width="15" height="15">
+                                        <use xlink:href="#cart"></use>
+                                    </svg> &nbsp; (0)</a></li>
+                        </div>
+                    </ul>
+                    <ul class="navbar-nav d-lg-block ms-auto me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-ltr text-white" href="#">ABOUT</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle nav-link-ltr text-white" href="#" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                SHOP
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="shop.html">Shop</a></li>
+                                <li><a class="dropdown-item" href="single-product.html">Shop-Single</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle nav-link-ltr text-white" href="#" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Pages
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="pages">
+                                <li><a href="about-us.html" class="dropdown-item">About Us</a></li>
+                                <li><a href="cart.html" class="dropdown-item">Cart</a></li>
+                                <li><a href="wishlist.html" class="dropdown-item">Wishlist</a></li>
+                                <li><a href="checkout.html" class="dropdown-item">Checkout</a></li>
+                                <li><a href="contact.html" class="dropdown-item">Contact</a></li>
+                                <li><a href="faqs.html" class="dropdown-item">FAQs</a></li>
+
+
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle nav-link-ltr text-white" href="#" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Articles
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="blog.html">Blog</a></li>
+                                <li><a class="dropdown-item" href="single-post.html">Single-post</a></li>
+                            </ul>
+                        </li>
+
+                    </ul>
+                </div>
+
+                <ul class="navbar-nav d-lg-block d-none list-unstyled">
+                    <div class="login">
+                        <li><a class="nav-link nav-link-ltr" href="account.html"><svg class="man" width="15"
+                                    height="15">
+                                    <use xlink:href="#man"></use>
+                                </svg> &nbsp; LOGIN</a></li>
+                    </div>
+                    <div class="search">
+                        <li class="search-box"><a class="nav-link nav-link-ltr search-button" href="#"><svg
+                                    class="search" width="15" height="15">
+                                    <use xlink:href="#search"></use>
+                                </svg> &nbsp; SEARCH</a></li>
+                    </div>
+                    <div class="wish">
+                        <li><a class="nav-link nav-link-ltr" href="wishlist.html"><svg class="wishlist" width="15"
+                                    height="15">
+                                    <use xlink:href="#wishlist"></use>
+                                </svg> &nbsp; (0)</a></li>
+                    </div>
+                    <div class="cart">
+                        <li><a class="nav-link nav-link-ltr" href="#" data-bs-toggle="offcanvas"
+                                data-bs-target="#offcanvasCart" aria-controls="offcanvasCart"><svg class="cart"
+                                    width="15" height="15">
+                                    <use xlink:href="#cart"></use>
+                                </svg> &nbsp; (0)</a></li>
+                    </div>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main id="banner">
+        <div class="position-relative"
+            style="background: url('images/video.jpg'); background-size: cover; background-repeat: no-repeat; background-position: center; height: 70vh;">
+            <div class="container-fluid ">
+                <div class="hero-content text-center position-absolute start-50 top-50 translate-middle">
+                    <h2 class="display-1 text-uppercase text-white mb-0">Single Post</h2>
+
+
+
+                    <nav class="breadcrumb d-flex justify-content-center mt-3 me-1">
+                        <a class="breadcrumb-item text-white" href="index.html">Home</a>
+                        <a class="breadcrumb-item text-white" href="#">Pages</a>
+                        <a class="breadcrumb-item active text-white" aria-current="page">Shop</a>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </main>
+    <section>
+        <div class="container px-3 px-md-5 padding-medium">
+            <div class="row">
+                <main class="post-grid">
+                    <div class="row">
+                        <article class="post-item">
+                            <div class="post-content">
+                                <h2 class="display-5 fw-light text-uppercase mb-5">Best Styling tips from experts</h2>
+
+                                <p>
+                                    <strong>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Consectetur
+                                        facilisis vivamus massa
+                                        magna. Blandit mauris libero condimentum commodo morbi consectetur sociis
+                                        convallis sit. Magna
+                                        diam amet justo sed vel dolor et volutpat integer. Iaculis sit sapien hac odio
+                                        elementum egestas
+                                        neque. Adipiscing purus euismod orci sem amet, et. Turpis erat ornare nisi
+                                        laoreet est
+                                        euismod.</strong>
+                                </p>
+                                <p>Sit suscipit tortor turpis sed fringilla lectus facilisis amet. Ipsum, amet dolor
+                                    curabitur non
+                                    aliquet orci urna volutpat. Id aliquam neque, ut vivamus sit imperdiet enim, lacus,
+                                    vel. Morbi arcu
+                                    amet, nulla fermentum vitae mattis arcu mi convallis. Urna in sollicitudin in
+                                    vestibulum erat.
+                                    Turpis faucibus augue ipsum, at aliquam. Cras sagittis tellus nunc integer vitae
+                                    neque bibendum
+                                    eget. Tempus malesuada et pellentesque maecenas. Sociis porttitor elit tincidunt
+                                    tellus sit ornare.
+                                    Purus ut quis sed venenatis eget ut ipsum, enim lacus. Praesent imperdiet vitae eu,
+                                    eu tincidunt
+                                    nunc integer sit.</p>
+                                <blockquote>“Sit suscipit tortor turpis sed fringilla lectus facilisis amet. Ipsum, amet
+                                    dolor
+                                    curabitur non aliquet orci urna volutpat. Id aliquam neque, ut vivamus sit imperdiet
+                                    enim, lacus,
+                                    vel.</blockquote>
+
+
+                                <div class="post-thumbnail my-5">
+                                    <img src="images/blog-single.jpg" alt="single-post" class="img-fluid">
+                                </div>
+                                <div class="post-description py-4">
+                                    <p>
+                                        <strong>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Consectetur
+                                            facilisis vivamus massa
+                                            magna. Blandit mauris libero condimentum commodo morbi consectetur sociis
+                                            convallis sit. Magna
+                                            diam amet justo sed vel dolor et volutpat integer. Iaculis sit sapien hac
+                                            odio elementum egestas
+                                            neque. Adipiscing purus euismod orci sem amet, et. Turpis erat ornare nisi
+                                            laoreet est
+                                            euismod.</strong>
+                                    </p>
+                                    <p>Sit suscipit tortor turpis sed fringilla lectus facilisis amet. Ipsum, amet dolor
+                                        curabitur non
+                                        aliquet orci urna volutpat. Id aliquam neque, ut vivamus sit imperdiet enim,
+                                        lacus, vel. Morbi arcu
+                                        amet, nulla fermentum vitae mattis arcu mi convallis. Urna in sollicitudin in
+                                        vestibulum erat.
+                                        Turpis faucibus augue ipsum, at aliquam. Cras sagittis tellus nunc integer vitae
+                                        neque bibendum
+                                        eget. Tempus malesuada et pellentesque maecenas. Sociis porttitor elit tincidunt
+                                        tellus sit ornare.
+                                        Purus ut quis sed venenatis eget ut ipsum, enim lacus. Praesent imperdiet vitae
+                                        eu, eu tincidunt
+                                        nunc integer sit.</p>
+                                    <blockquote>“Sit suscipit tortor turpis sed fringilla lectus facilisis amet. Ipsum,
+                                        amet dolor
+                                        curabitur non aliquet orci urna volutpat. Id aliquam neque, ut vivamus sit
+                                        imperdiet enim, lacus,
+                                        vel.</blockquote>
+
+                                    <div class="row align-items-center my-5">
+                                        <div class="col-12 col-md-6">
+                                            <p>
+                                                <strong>Consectetur Facilisis Vivamus</strong>
+                                            </p>
+                                            <ul style="list-style-type:disc;" class="inner-list">
+                                                <li>Blandit mauris libero condimentum commodo sociis convallis sit.</li>
+                                                <li>Magna diam amet justo sed vel dolor et volutpat integer.</li>
+                                                <li>Laculis sit sapien hac odio elementum egestas neque.</li>
+                                                <li>Blandit mauris libero condimentum commodo sociis convallis sit.</li>
+                                                <li>Magna diam amet justo sed vel dolor et volutpat integer.</li>
+                                                <li>Laculis sit sapien hac odio elementum egestas neque.</li>
+                                                <li>Blandit mauris libero condimentum commodo sociis convallis sit.</li>
+                                                <li>Magna diam amet justo sed vel dolor et volutpat integer.</li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <p>
+                                                <strong>Consectetur Facilisis Vivamus</strong>
+                                            </p>
+                                            <ul style="list-style-type:disc;" class="inner-list">
+                                                <li>Blandit mauris libero condimentum commodo sociis convallis sit.</li>
+                                                <li>Magna diam amet justo sed vel dolor et volutpat integer.</li>
+                                                <li>Laculis sit sapien hac odio elementum egestas neque.</li>
+                                                <li>Blandit mauris libero condimentum commodo sociis convallis sit.</li>
+                                                <li>Magna diam amet justo sed vel dolor et volutpat integer.</li>
+                                                <li>Laculis sit sapien hac odio elementum egestas neque.</li>
+                                                <li>Blandit mauris libero condimentum commodo sociis convallis sit.</li>
+                                                <li>Magna diam amet justo sed vel dolor et volutpat integer.</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <p>Morbi arcu amet, nulla fermentum vitae mattis arcu mi convallis. Urna in
+                                        sollicitudin in vestibulum
+                                        erat. Turpis faucibus augue ipsum, at aliquam. Cras sagittis tellus nunc integer
+                                        vitae neque
+                                        bibendum eget. Tempus malesuada et pellentesque maecenas. Sociis porttitor elit
+                                        tincidunt tellus sit
+                                        ornare. Purus ut ipsum, enim lacus. Praesent imperdiet vitae eu, eu tincidunt
+                                        nunc integer sit.</p>
+                                    <p>Morbi arcu amet, nulla fermentum vitae mattis arcu mi convallis. Urna in
+                                        sollicitudin in vestibulum
+                                        erat. Turpis faucibus augue ipsum, at aliquam. Cras sagittis tellus nunc integer
+                                        vitae neque
+                                        bibendum eget. Tempus malesuada et pellentesque maecenas. Sociis porttitor elit
+                                        tincidunt tellus sit
+                                        ornare. Purus ut ipsum, enim lacus. Praesent imperdiet vitae eu, eu tincidunt
+                                        nunc integer sit.</p>
+                                    <p>
+                                        <strong>Velit, praesent pharetra malesuada</strong>
+                                    </p>
+                                    <p>Id pulvinar amet. Consequat potenti mollis massa iaculis et, dolor, eget lectus.
+                                        Aliquam
+                                        pellentesque molestie felis fames sed eget non euismod eget. Et eget ullamcorper
+                                        urna, elit ac diam
+                                        tellus viverra lacus.</p>
+                                    <p>Tortor diam dignissim amet, in interdum aliquet. Magnis dictum et eros purus
+                                        fermentum, massa
+                                        ullamcorper sit sollicitudin. Nascetur libero elementum adipiscing mauris
+                                        maecenas et magna. Etiam
+                                        nec, rutrum a diam lacus, nunc integer etiam. Mattis pulvinar non viverra donec
+                                        pellentesque. Odio
+                                        mi consequat libero dolor. Porta ut diam lobortis eget leo, lectus.</p>
+                                    <p>Velit, praesent pharetra malesuada id pulvinar amet. Consequat potenti mollis
+                                        massa iaculis et,
+                                        dolor, eget lectus. Aliquam pellentesque molestie felis fames sed eget non
+                                        euismod eget. Et eget
+                                        ullamcorper urna, elit ac diam tellus viverra lacus.</p>
+
+                                    <div class="post-tags mt-5">
+                                        <div class="block-tag col-md-12">
+                                            <ul class="list-unstyled d-md-flex">
+                                                <li class="pe-3 my-2">
+                                                    <a href="#" class="btn btn-dark fs-6 py-2 px-3">Modish suits</a>
+                                                </li>
+                                                <li class="pe-3 my-2">
+                                                    <a href="#" class="btn btn-dark fs-6 py-2 px-3">sweatshirts</a>
+                                                </li>
+                                                <li class="pe-3 my-2">
+                                                    <a href="#" class="btn btn-dark fs-6 py-2 px-3">Hoodie</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div id="single-post-navigation" class="my-5">
+                                    <div
+                                        class="post-navigation d-flex flex-wrap align-items-center justify-content-between">
+                                        <a itemprop="url" class="post-prev d-flex flex-column text-decoration-none"
+                                            href="#" title="Previous Post">
+                                            <span class="text-muted">Previous</span>
+                                            <h3 class="page-nav-title">How to get good look in budget</h3>
+                                        </a>
+                                        <a itemprop="url" class="post-next d-flex flex-column text-decoration-none"
+                                            href="#" title="Next Post">
+                                            <span class="text-muted">Next</span>
+                                            <h3 class="page-nav-title">Best Styling tips from experts</h3>
+                                        </a>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </article>
+
+                        <!-- comments -->
+                        <section id="post-comment">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="comments-wrap">
+                                            <h2 class="display-6 fw-normal text-dark my-5">
+                                                <span class="count">3</span> Comments
+                                            </h2>
+                                            <div class="comment-list padding-small">
+                                                <article class="comment-item d-flex flex-wrap mb-3">
+                                                    <div class="col-lg-1 col-sm-3 me-4 mb-3">
+                                                        <img src="images/reviewer5.jpg" alt="default"
+                                                            class="img-fluid rounded-circle">
+                                                    </div>
+                                                    <div class="col-lg-10 col-sm-9 mb-4">
+                                                        <div class="author-post">
+                                                            <div class="comment-meta d-flex">
+                                                                <h5 class="author-name text-dark pe-1">Sam Smith</h5>
+                                                                <span class="meta-date text-muted">Jul 10</span>
+                                                            </div>
+                                                            <p class="m-0">Mattis pulvinar non viverra donec
+                                                                pellentesque. Odio mi consequat
+                                                                libero dolor. Porta ut diam lobortis eget leo, lectus.
+                                                                Tortor diam dignissim amet, in
+                                                                interdum aliquet. Nascetur libero elementum adipiscing
+                                                                mauris maecenas et magna.</p>
+                                                            <div class="comments-reply">
+                                                                <a href="#"
+                                                                    class="text-decoration-underline text-dark">Reply
+                                                                    Now</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </article>
+                                                <article class="comment-item d-flex child-comments flex-wrap ps-5 mb-3">
+                                                    <div class="col-lg-1 col-sm-3 me-4 mb-3">
+                                                        <img src="images/reviewer4.jpg" alt="default"
+                                                            class="img-fluid rounded-circle">
+                                                    </div>
+                                                    <div class="col-lg-10 col-sm-9 mb-4">
+                                                        <div class="author-post">
+                                                            <div class="comment-meta d-flex">
+                                                                <h5 class="author-name text-dark pe-1">Santie Mary</h5>
+                                                                <span class="meta-date text-muted">Jul 10</span>
+                                                            </div>
+                                                            <p class="m-0">Tristique tempis condimentum diam done
+                                                                ullancomroer sit element
+                                                                henddg sit he consequert.Tristique tempis condimentum
+                                                                diam done ullancomroer sit element
+                                                                henddg sit he consequert.</p>
+                                                            <div class="comments-reply">
+                                                                <a href="#"
+                                                                    class="text-decoration-underline text-dark">Reply
+                                                                    Now</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </article>
+                                                <article class="comment-item d-flex flex-wrap">
+                                                    <div class="col-lg-1 col-sm-3 me-4 mb-3">
+                                                        <img src="images/reviewer3.jpg" alt="default"
+                                                            class="img-fluid rounded-circle">
+                                                    </div>
+                                                    <div class="col-lg-10 col-sm-9 mb-4">
+                                                        <div class="author-post">
+                                                            <div class="comment-meta d-flex">
+                                                                <h5 class="author-name text-dark pe-1">Analisa Nora</h5>
+                                                                <span class="meta-date text-muted">Jul 10</span>
+                                                            </div>
+                                                            <p class="m-0">Tristique tempis condimentum diam done
+                                                                ullancomroer sit element
+                                                                henddg sit he consequert.Tristique tempis condimentum
+                                                                diam done ullancomroer sit element
+                                                                henddg sit he consequert.</p>
+                                                            <div class="comments-reply">
+                                                                <a href="#"
+                                                                    class="text-decoration-underline text-dark">Reply
+                                                                    Now</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </article>
+                                            </div>
+                                        </div>
+                                        <div class="comment-respond pt-3 mt-5">
+                                            <h2 class="display-6 fw-normal text-dark my-5">Leave a Comment</h2>
+
+                                            <form id="form" class="form-group flex-wrap">
+                                                <div class="form-input col-lg-12 d-flex mb-3">
+                                                    <input type="text" name="email" placeholder="Write Your Name Here*"
+                                                        class="form-control ps-3 me-3">
+                                                    <input type="text" name="email" placeholder="Write Your Email Here*"
+                                                        class="form-control ps-3">
+                                                </div>
+                                                <div class="col-lg-12 mb-3">
+                                                    <textarea placeholder="Write Your Message Here*"
+                                                        class="form-control ps-3" rows="8"></textarea>
+                                                </div>
+                                                <div class="">
+                                                    <button
+                                                        class="btn btn-arrow btn-primary btn-lg btn-pill btn-dark fs-6">Submit</button>
+                                                </div>
+                                            </form>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <!-- / comments -->
+
+                    </div>
+                </main>
+            </div>
+        </div>
+    </section>
+
+    <div id="blog">
+        <div class="container px-3 px-md-5 padding-medium pt-0">
+            <div class="section-header d-md-flex justify-content-between align-items-center mb-3">
+                <h2 class="display-5 fw-light text-uppercase">Recent Blog Post</h2>
+                <div>
+                    <a href="blog.html" class="btn btn-outline-dark py-3 px-5">
+                        Read Blog</a>
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col-md-4 my-4">
+                    <div class="z-1 position-absolute m-2 px-3 pt-1">
+                        <h2 class="text-white display-4 m-0">20<span class="fs-4">FEB</span> </h2>
+                    </div>
+                    <div class="card position-relative ">
+                        <a href="single-post.html"><img src="images/blog5.jpg" class="img-fluid" alt="image"></a>
+                        <div class="card-body p-0">
+                            <a href="single-post.html">
+                                <h3 class="card-title pt-4 pb-3 m-0">10 new fashion style for this summer</h3>
+                            </a>
+
+                            <div class="card-text">
+                                <p class="blog-paragraph fs-6">At the core of our practice is the idea that cities are
+                                    the incubators of
+                                    our greatest
+                                    achievements, and the best hope for a sustainable future. This is the best way to
+                                    style the product in
+                                    your own wat.</p>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 my-4">
+                    <div class="z-1 position-absolute m-2 px-3 pt-1">
+                        <h2 class="text-white display-4 m-0">21<span class="fs-4">FEB</span> </h2>
+
+                    </div>
+                    <div class="card position-relative ">
+                        <a href="single-post.html"><img src="images/blog2.jpg" class="img-fluid" alt="image"></a>
+                        <div class="card-body p-0">
+                            <a href="single-post.html">
+                                <h3 class="card-title pt-4 pb-3 m-0">How to get good look in budget</h3>
+                            </a>
+
+                            <div class="card-text">
+                                <p class="blog-paragraph fs-6">At the core of our practice is the idea that cities are
+                                    the incubators of
+                                    our greatest
+                                    achievements, and the best hope for a sustainable future. This is the best way to
+                                    style the product in
+                                    your own wat.</p>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 my-4">
+                    <div class="z-1 position-absolute m-2 px-3 pt-1">
+                        <h2 class="text-white display-4 m-0">22<span class="fs-4">FEB</span> </h2>
+
+                    </div>
+                    <div class="card position-relative">
+                        <a href="single-post.html"><img src="images/blog1.jpg" class="img-fluid" alt="image"></a>
+                        <div class="card-body p-0">
+                            <a href="single-post.html">
+                                <h3 class="card-title pt-4 pb-3 m-0">Best Styling tips from experts</h3>
+                            </a>
+
+                            <div class="card-text">
+                                <p class="blog-paragraph fs-6">At the core of our practice is the idea that cities are
+                                    the incubators of
+                                    our greatest
+                                    achievements, and the best hope for a sustainable future. This is the best way to
+                                    style the product in
+                                    your own wat.</p>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <section id="subscribe" class="padding-medium pt-0">
+        <div class="container">
+            <h3 class="display-1 text-center mb-5 text-muted opacity-25 ">SUBSCRIBE US</h3>
+            <div class="offset-lg-3 col-lg-6">
+                <form>
+                    <div class="input-group">
+                        <input type="email" class="form-control rounded-0 border-black"
+                            placeholder="Write your email address here...">
+                        <span class="input-group-btn">
+                            <button class="btn btn-dark rounded-0 px-5" type="submit">Subscribe</button>
+                        </span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <section id="footer" class="bg-black text-white">
+        <div class="container padding-medium">
+            <div class="row">
+                <div class="col-md-6 col-lg-3 mb-3 mb-lg-0">
+                    <div class="logo"><img src="images/Logo.png" alt="logo"></div>
+                </div>
+                <div class="col-md-6 col-lg-2 mb-3 mb-lg-0">
+                    <nav>
+                        <ul class="list-unstyled">
+                            <li class="nav-item mb-2">
+                                <a class="nav-link nav-link-ltr" href="about-us.html">ABOUT</a>
+                            </li>
+                            <li class="nav-item mb-2 ">
+                                <a class="nav-link nav-link-ltr">SHOP</a>
+                            <li class="nav-item mb-2">
+                                <a class="nav-link nav-link-ltr" href="#">SALE</a>
+                            </li>
+                            <li class="nav-item mb-2">
+                                <a class="nav-link nav-link-ltr" href="#">ARTICLES</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="col-md-6 col-lg-2 mb-3 mb-lg-0">
+                    <nav>
+                        <ul class="list-unstyled">
+                            <li class="nav-item mb-2"><a class="nav-link nav-link-ltr" href="#">TRACK ORDER</a></li>
+                            <li class="nav-item mb-2"><a class="nav-link nav-link-ltr" href="#">RETURN POLICY</a></li>
+                            <li class="nav-item mb-2"><a class="nav-link nav-link-ltr" href="#">SHIPPING</a></li>
+                            <li class="nav-item mb-2"><a class="nav-link nav-link-ltr" href="#">CONTACT US</a></li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="col-md-6 col-lg-2 mb-3 mb-lg-0">
+                    <nav>
+                        <ul class="list-unstyled">
+                            <li class="nav-item mb-2"><a class="nav-link nav-link-ltr" href="#">FACEBOOK</a></li>
+                            <li class="nav-item mb-2"><a class="nav-link nav-link-ltr" href="#">INSTAGRAM</a></li>
+                            <li class="nav-item mb-2"><a class="nav-link nav-link-ltr" href="#">TWITTER</a></li>
+                            <li class="nav-item mb-2"><a class="nav-link nav-link-ltr" href="#">YOUTUBE</a></li>
+                            <li class="nav-item mb-2"><a class="nav-link nav-link-ltr" href="#">PINTEREST</a></li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-3 mb-lg-0">
+                    Do you have any queries?<br>
+                    <a href="#" class="text-decoration-underline text-white">templatesjungle@gmail.com</a> <br>
+                    If you need support? Give us a call. <br>
+                    +12 23 34 456 678
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="copyright text-center">
+            <p class="m-0 pb-3">© 2024 Modish. All rights reserved by <a href="https://templatesjungle.com/"
+                    target="_blank" class="text-decoration-underline text-white"> TemplatesJungle</a></p>
+        </div>
+    </section>
+
+    <!-- Script -->
+    <script src="js/jquery-1.11.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
+    <script type="text/javascript" src="js/plugins.js"></script>
+    <script type="text/javascript" src="js/script.js"></script>
+
+</body>
+
+</html>

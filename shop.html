@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <title>Каталог — UNO RÓBE - </title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="author" content="">
+  <meta name="keywords" content="">
+  <meta name="description" content="">
+
+  <!--Bootstrap ================================================== -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+  <!--Link Swiper's CSS ================================================== -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+
+  <!-- Style Sheet ================================================== -->
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="css/unorobe.css">
+
+  <!-- Google Fonts ================================================== -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Jost:ital,wght@0,100..900;1,100..900&display=swap"
+    rel="stylesheet">
+</head>
+
+<body>
+  <!-- svg icon -->
+  <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+
+    <symbol id="man" viewBox="0 0 512 512">
+      <path fill="currentColor"
+        d="M332.64 64.58C313.18 43.57 286 32 256 32c-30.16 0-57.43 11.5-76.8 32.38c-19.58 21.11-29.12 49.8-26.88 80.78C156.76 206.28 203.27 256 256 256s99.16-49.71 103.67-110.82c2.27-30.7-7.33-59.33-27.03-80.6M432 480H80a31 31 0 0 1-24.2-11.13c-6.5-7.77-9.12-18.38-7.18-29.11C57.06 392.94 83.4 353.61 124.8 326c36.78-24.51 83.37-38 131.2-38s94.42 13.5 131.2 38c41.4 27.6 67.74 66.93 76.18 113.75c1.94 10.73-.68 21.34-7.18 29.11A31 31 0 0 1 432 480" />
+    </symbol>
+    <symbol id="search" viewBox="0 0 512 512">
+      <path fill="currentColor"
+        d="M456.69 421.39L362.6 327.3a173.8 173.8 0 0 0 34.84-104.58C397.44 126.38 319.06 48 222.72 48S48 126.38 48 222.72s78.38 174.72 174.72 174.72A173.8 173.8 0 0 0 327.3 362.6l94.09 94.09a25 25 0 0 0 35.3-35.3M97.92 222.72a124.8 124.8 0 1 1 124.8 124.8a124.95 124.95 0 0 1-124.8-124.8" />
+    </symbol>
+    <symbol id="expand" viewBox="0 0 32 32">
+      <path fill="currentColor"
+        d="m25.545 23.328l-7.627-7.705l7.616-7.616l1.857 1.857l2.26-8.428l-8.428 2.258l1.836 1.836l-7.603 7.604l-7.513-7.59L9.81 3.695L1.392 1.394l2.215 8.44l1.848-1.83l7.524 7.604l-7.515 7.515l-1.856-1.855l-2.26 8.427l8.43-2.257L7.94 25.6l7.503-7.502l7.614 7.693l-1.867 1.848l8.416 2.3l-2.213-8.438z" />
+    </symbol>
+    <symbol id="wishlist" viewBox="0 0 512 512">
+      <path fill="currentColor"
+        d="M256 448a32 32 0 0 1-18-5.57c-78.59-53.35-112.62-89.93-131.39-112.8c-40-48.75-59.15-98.8-58.61-153C48.63 114.52 98.46 64 159.08 64c44.08 0 74.61 24.83 92.39 45.51a6 6 0 0 0 9.06 0C278.31 88.81 308.84 64 352.92 64c60.62 0 110.45 50.52 111.08 112.64c.54 54.21-18.63 104.26-58.61 153c-18.77 22.87-52.8 59.45-131.39 112.8a32 32 0 0 1-18 5.56" />
+    </symbol>
+    <symbol id="cart" viewBox="0 0 512 512">
+      <circle cx="176" cy="416" r="32" fill="currentColor" />
+      <circle cx="400" cy="416" r="32" fill="currentColor" />
+      <path fill="currentColor"
+        d="M456.8 120.78a23.92 23.92 0 0 0-18.56-8.78H133.89l-6.13-34.78A16 16 0 0 0 112 64H48a16 16 0 0 0 0 32h50.58l45.66 258.78A16 16 0 0 0 160 368h256a16 16 0 0 0 0-32H173.42l-5.64-32h241.66A24.07 24.07 0 0 0 433 284.71l28.8-144a24 24 0 0 0-5-19.93" />
+    </symbol>
+    <symbol id="play" viewBox="0 0 512 512">
+      <path fill="currentColor" d="m96 448l320-192L96 64z" />
+    </symbol>
+    <symbol id="down" viewBox="0 0 24 24">
+      <g fill="none" fill-rule="evenodd">
+        <path
+          d="M24 0v24H0V0zM12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.019-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z" />
+        <path fill="currentColor"
+          d="M13.06 16.06a1.5 1.5 0 0 1-2.12 0l-5.658-5.656a1.5 1.5 0 1 1 2.122-2.121L12 12.879l4.596-4.596a1.5 1.5 0 0 1 2.122 2.12l-5.657 5.658Z" />
+      </g>
+    </symbol>
+    <symbol id="arrow-right" viewBox="0 0 24 24">
+      <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="m10 17l5-5l-5-5" />
+    </symbol>
+    <symbol id="arrow-left" viewBox="0 0 24 24">
+      <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="m14 7l-5 5l5 5" />
+    </symbol>
+    <symbol id="expand" viewBox="0 0 32 32">
+      <path fill="currentColor"
+        d="m25.545 23.328l-7.627-7.705l7.616-7.616l1.857 1.857l2.26-8.428l-8.428 2.258l1.836 1.836l-7.603 7.604l-7.513-7.59L9.81 3.695L1.392 1.394l2.215 8.44l1.848-1.83l7.524 7.604l-7.515 7.515l-1.856-1.855l-2.26 8.427l8.43-2.257L7.94 25.6l7.503-7.502l7.614 7.693l-1.867 1.848l8.416 2.3l-2.213-8.438z" />
+    </symbol>
+    <symbol id="wishlist" viewBox="0 0 512 512">
+      <path fill="currentColor"
+        d="M256 448a32 32 0 0 1-18-5.57c-78.59-53.35-112.62-89.93-131.39-112.8c-40-48.75-59.15-98.8-58.61-153C48.63 114.52 98.46 64 159.08 64c44.08 0 74.61 24.83 92.39 45.51a6 6 0 0 0 9.06 0C278.31 88.81 308.84 64 352.92 64c60.62 0 110.45 50.52 111.08 112.64c.54 54.21-18.63 104.26-58.61 153c-18.77 22.87-52.8 59.45-131.39 112.8a32 32 0 0 1-18 5.56" />
+    </symbol>
+    <symbol xmlns="http://www.w3.org/2000/svg" id="heart" viewBox="0 0 24 24">
+      <path fill="currentColor"
+        d="M20.16 4.61A6.27 6.27 0 0 0 12 4a6.27 6.27 0 0 0-8.16 9.48l7.45 7.45a1 1 0 0 0 1.42 0l7.45-7.45a6.27 6.27 0 0 0 0-8.87Zm-1.41 7.46L12 18.81l-6.75-6.74a4.28 4.28 0 0 1 3-7.3a4.25 4.25 0 0 1 3 1.25a1 1 0 0 0 1.42 0a4.27 4.27 0 0 1 6 6.05Z" />
+    </symbol>
+  </svg>
+
+  <div class="search-popup">
+        <div class="search-popup-container">
+
+            <form role="search" method="get" class="form-group" action="">
+                <input type="search" id="search-form" class="form-control border-0 border-bottom"
+                    placeholder="Введите запрос и нажмите Enter" value="" name="s" />
+                <button type="submit" class="search-submit border-0 position-absolute bg-white"
+                    style="top: 15px;right: 15px;"><svg class="search" width="24" height="24">
+                        <use xlink:href="#search"></use>
+                    </svg></button>
+            </form>
+
+            <h5 class="cat-list-title">Категории</h5>
+
+            <ul class="cat-list">
+                <li class="cat-list-item mb-3"><a href="shop.html" title="Платья мини">Платья мини</a></li>
+                <li class="cat-list-item mb-3"><a href="shop.html" title="Платья миди">Платья миди</a></li>
+                <li class="cat-list-item mb-3"><a href="shop.html" title="Платья макси">Платья макси</a></li>
+                <li class="cat-list-item mb-3"><a href="shop.html" title="Коктейльные">Коктейльные</a></li>
+                <li class="cat-list-item mb-3"><a href="shop.html" title="Вечерние">Вечерние</a></li>
+                <li class="cat-list-item mb-3"><a href="shop.html" title="Новинки">Новинки</a></li>
+            </ul>
+
+        </div>
+    </div>
+
+        <div class="offcanvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id="offcanvasCart"
+        aria-labelledby="My Cart">
+        <div class="offcanvas-header justify-content-between border-bottom">
+            <h5 class="mb-0 text-uppercase secondary-font">Корзина</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body d-flex flex-column">
+            <ul class="list-group list-group-flush mb-3" id="cart-items"></ul>
+            <p class="text-muted text-center py-5 my-auto" id="cart-empty">Корзина пуста.<br>Добавьте модели из каталога.</p>
+            <div class="mt-auto pt-3 border-top">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="fw-bold text-uppercase">Итого</span>
+                    <strong id="cart-total">0 ₽</strong>
+                </div>
+                <button class="w-100 btn btn-dark rounded-0 py-3 text-uppercase" id="cart-checkout" type="button">Оформить заказ в Instagram</button>
+                <p class="small text-muted mt-3 mb-0">Состав заказа скопируется, а Instagram Direct откроется автоматически — останется вставить и отправить.</p>
+            </div>
+        </div>
+    </div>
+
+    <header class="site-header position-absolute top-0 start-0 w-100" id="siteHeader">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid px-4 px-lg-5">
+                <a class="navbar-brand brand-wordmark" href="index.html">uno róbe.</a>
+                <button class="navbar-toggler shadow-none border-0 p-0" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Меню">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mx-lg-auto mb-2 mb-lg-0 header-menu text-center">
+                        <li class="nav-item"><a class="nav-link nav-link-ltr" href="about-us.html">О бренде</a></li>
+                        <li class="nav-item"><a class="nav-link nav-link-ltr" href="shop.html">Каталог</a></li>
+                        <li class="nav-item"><a class="nav-link nav-link-ltr" href="contact.html">Контакты</a></li>
+                    </ul>
+                    <ul class="navbar-nav header-icons flex-row align-items-center justify-content-center gap-4">
+                        <li class="nav-item"><a class="nav-link d-flex align-items-center" href="https://www.instagram.com/unorobeofficial/" target="_blank" rel="noopener" aria-label="Instagram"><svg class="man" width="17" height="17"><use xlink:href="#man"></use></svg></a></li>
+                        <li class="nav-item"><a class="nav-link search-button d-flex align-items-center" href="#" aria-label="Поиск"><svg class="search" width="17" height="17"><use xlink:href="#search"></use></svg></a></li>
+                        <li class="nav-item"><a class="nav-link d-flex align-items-center" href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart" aria-label="Корзина"><svg class="cart" width="18" height="18"><use xlink:href="#cart"></use></svg>&nbsp;<span class="cart-count">0</span></a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+  <main id="banner">
+    <div class="position-relative"
+      style="background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.55)), url('images/hero-evening.jpg'); background-size: cover; background-repeat: no-repeat; background-position: center 20%; height: 78vh;">
+      <div class="container-fluid ">
+        <div class="hero-content text-center position-absolute start-50 top-50 translate-middle">
+          <h2 class="display-1 text-uppercase text-white mb-0">Каталог</h2>
+
+
+
+          <nav class="breadcrumb d-flex justify-content-center mt-3 me-1">
+            <a class="breadcrumb-item text-white" href="index.html">Главная</a>
+            
+            <a class="breadcrumb-item active text-white" aria-current="page">Каталог</a>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <section id="shop">
+    <div class="container px-3 px-md-5 padding-medium">
+      <div class="row flex-md-row-reverse g-md-5 mb-5">
+
+        <main class="col-md-9 product-store">
+          <div class="filter-shop d-md-flex justify-content-between align-items-center mb-4">
+            <p class="m-0" id="products-count"></p>
+            <select id="sort-select" class="filter-categories border-0 m-0">
+              <option value="">Сортировка</option>
+              <option value="price-asc">Цена: по возрастанию</option>
+              <option value="price-desc">Цена: по убыванию</option>
+              <option value="name-asc">Название А–Я</option>
+              <option value="name-desc">Название Я–А</option>
+            </select>
+          </div>
+          <div id="product-grid" class="row"></div>
+        </main>
+        <aside class="col-md-3 mt-5">
+          <div class="sidebar">
+            <div class="widget-menu">
+              <div class="widget-search-bar">
+                <div class="search-bar border rounded-2 border-dark-subtle pe-3">
+                  <form class="text-center d-flex align-items-center" onsubmit="return false;">
+                    <input type="text" id="shop-search-side" class="form-control border-0 bg-transparent" placeholder="Поиск по каталогу" />
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M21.71 20.29L18 16.61A9 9 0 1 0 16.61 18l3.68 3.68a1 1 0 0 0 1.42 0a1 1 0 0 0 0-1.39ZM11 18a7 7 0 1 1 7-7a7 7 0 0 1-7 7Z"/></svg>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <div class="widget-product-categories pt-5">
+              <h4 class="widget-title">Категории</h4>
+              <ul id="filter-categories" class="product-categories sidebar-list list-unstyled"></ul>
+            </div>
+            <div class="widget-product-tags pt-3">
+              <h4 class="widget-title">Цвет</h4>
+              <ul id="filter-colors" class="product-tags sidebar-list list-unstyled"></ul>
+            </div>
+            <div class="widget-price-filter pt-3">
+              <h4 class="widget-title">Цена</h4>
+              <ul id="filter-prices" class="product-tags sidebar-list list-unstyled"></ul>
+            </div>
+            <div class="pt-4">
+              <a href="https://www.instagram.com/unorobeofficial/" class="btn btn-dark w-100" target="_blank" rel="noopener">Заказать в Instagram</a>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+      <section id="subscribe" class="padding-medium pt-0">
+        <div class="container text-center">
+            <h3 class="display-1 mb-4 text-muted opacity-25">INSTAGRAM</h3>
+            <p class="fs-5 mb-4">Новинки коллекции и заказ в Direct</p>
+            <a href="https://www.instagram.com/unorobeofficial/" class="btn btn-dark rounded-0 px-5 py-3 text-uppercase" target="_blank" rel="noopener">@unorobeofficial</a>
+        </div>
+    </section>
+
+  <section id="footer" class="bg-black text-white">
+        <div class="container padding-medium">
+            <div class="row">
+                <div class="col-md-6 col-lg-3 mb-3 mb-lg-0">
+                    <div class="logo"><a href="index.html" class="brand-wordmark-footer">uno róbe.</a></div>
+                </div>
+                <div class="col-md-6 col-lg-2 mb-3 mb-lg-0">
+                    <nav>
+                        <ul class="list-unstyled">
+                            <li class="nav-item mb-2"><a class="nav-link nav-link-ltr" href="about-us.html">О БРЕНДЕ</a></li>
+                            <li class="nav-item mb-2"><a class="nav-link nav-link-ltr" href="shop.html">КАТАЛОГ</a></li>
+                            <li class="nav-item mb-2"><a class="nav-link nav-link-ltr" href="contact.html">КОНТАКТЫ</a></li>
+                            <li class="nav-item mb-2"><a class="nav-link nav-link-ltr" href="https://www.instagram.com/unorobeofficial/" target="_blank" rel="noopener">INSTAGRAM</a></li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="col-md-6 col-lg-2 mb-3 mb-lg-0">
+                    <nav>
+                        <ul class="list-unstyled">
+                            <li class="nav-item mb-2"><a class="nav-link nav-link-ltr" href="#">ДОСТАВКА</a></li>
+                            <li class="nav-item mb-2"><a class="nav-link nav-link-ltr" href="#">ВОЗВРАТ</a></li>
+                            <li class="nav-item mb-2"><a class="nav-link nav-link-ltr" href="#">ОПЛАТА</a></li>
+                            <li class="nav-item mb-2"><a class="nav-link nav-link-ltr" href="contact.html">СВЯЗАТЬСЯ</a></li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="col-md-6 col-lg-2 mb-3 mb-lg-0">
+                    <nav>
+                        <ul class="list-unstyled">
+                            <li class="nav-item mb-2"><a class="nav-link nav-link-ltr" href="https://www.instagram.com/unorobeofficial/" target="_blank" rel="noopener">INSTAGRAM</a></li>
+                            <li class="nav-item mb-2"><a class="nav-link nav-link-ltr" href="shop.html">КАТАЛОГ</a></li>
+                            <li class="nav-item mb-2"><a class="nav-link nav-link-ltr" href="about-us.html">О БРЕНДЕ</a></li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-3 mb-lg-0">
+                    Вопросы по заказу?<br>
+                    <a href="https://www.instagram.com/unorobeofficial/" class="text-decoration-underline text-white" target="_blank" rel="noopener">@unorobeofficial</a> <br>
+                    Краснодар · Доставка по России
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="copyright text-center">
+            <p class="m-0 pb-3">© 2026 UNO RÓBE. Все права защищены.</p>
+        </div>
+    </section>
+
+    <!-- Video Popup -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><svg class="bi"
+                            width="40" height="40">
+                            <use xlink:href="#close-sharp"></use>
+                        </svg></button>
+                    <div class="ratio ratio-16x9">
+                        <iframe class="embed-responsive-item" src="" id="video" allowscriptaccess="always"
+                            allow="autoplay"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script -->
+    <script src="js/jquery-1.11.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
+    <script type="text/javascript" src="js/plugins.js"></script>
+    <script src="js/products.js"></script>
+    <script src="js/unorobe.js"></script>
+    <script type="text/javascript" src="js/script.js"></script>
+
+</body>
+
+</body>
+
+</html>
