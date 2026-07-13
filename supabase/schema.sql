@@ -38,4 +38,19 @@ create policy "reviews_public_read" on reviews for select using (approved = true
 create policy "reviews_public_insert" on reviews for insert with check (approved = false);
 create policy "reviews_admin_all" on reviews for all using (auth.role() = 'authenticated');
 
--- Storage: создайте bucket "products" (public) в Supabase → Storage
+-- Storage bucket для фото товаров
+insert into storage.buckets (id, name, public)
+values ('products', 'products', true)
+on conflict (id) do update set public = true;
+
+create policy "products_images_public_read" on storage.objects
+  for select using (bucket_id = 'products');
+
+create policy "products_images_auth_upload" on storage.objects
+  for insert with check (bucket_id = 'products' and auth.role() = 'authenticated');
+
+create policy "products_images_auth_update" on storage.objects
+  for update using (bucket_id = 'products' and auth.role() = 'authenticated');
+
+create policy "products_images_auth_delete" on storage.objects
+  for delete using (bucket_id = 'products' and auth.role() = 'authenticated');
