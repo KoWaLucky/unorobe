@@ -84,15 +84,26 @@ async function fetchJson(path) {
   const localUrl = path.startsWith('http') ? path : `${path}?v=${Math.floor(Date.now() / CACHE_TTL_MS)}`;
   try {
     const localRes = await fetch(localUrl);
-    if (localRes.ok) return localRes.json();
+    if (localRes.ok) return parseJsonResponse(localRes);
   } catch (e) { /* offline */ }
 
   const base = dataBaseUrl();
   if (base) {
     const remoteRes = await fetch(`${base}/${path}?t=${Date.now()}`);
-    if (remoteRes.ok) return remoteRes.json();
+    if (remoteRes.ok) return parseJsonResponse(remoteRes);
   }
   throw new Error(`Не удалось загрузить ${path}`);
+}
+
+async function parseJsonResponse(res) {
+  if (res.status === 204 || res.status === 205) return null;
+  const text = await res.text();
+  if (!text.trim()) return null;
+  try {
+    return JSON.parse(text);
+  } catch (e) {
+    throw new Error('Некорректный ответ сервера');
+  }
 }
 
 async function loadCatalog() {

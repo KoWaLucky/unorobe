@@ -182,8 +182,8 @@ async function supabaseSignIn(email, password) {
     headers: { apikey: cfg.anonKey, 'Content-Type': 'application/json' },
     body: JSON.stringify({ email, password }),
   });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.error_description || data.msg || 'Invalid login credentials');
+  const data = await parseJsonResponse(res);
+  if (!res.ok) throw new Error(data?.error_description || data?.msg || 'Invalid login credentials');
   sessionStorage.setItem(SB_TOKEN_KEY, data.access_token);
   return data.user;
 }
@@ -203,7 +203,7 @@ async function supabaseGetSession() {
     sessionStorage.removeItem(SB_TOKEN_KEY);
     return null;
   }
-  const user = await res.json();
+  const user = await parseJsonResponse(res);
   return { user, access_token: token };
 }
 

@@ -95,6 +95,11 @@ function renderReviewsTable() {
   </tr>`).join('');
 }
 
+function ensureEditingProductId() {
+  if (!editingProductId) editingProductId = newProductId();
+  return editingProductId;
+}
+
 function fillProductForm(p = null) {
   editingProductId = p?.id || null;
   $('#product-form-title').textContent = p ? 'Редактировать товар' : 'Новый товар';
@@ -135,7 +140,7 @@ function collectSizes() {
 function readProductForm() {
   const trackSizes = $('#pf-trackSizes').checked;
   const existing = editingProductId ? adminCatalog.find((p) => p.id === editingProductId) : null;
-  const id = existing?.id || newProductId();
+  const id = existing?.id || ensureEditingProductId();
   const sku = existing?.sku || nextSku(adminCatalog);
   const imageUrl = $('#pf-image-url').value.trim();
   return {
@@ -175,7 +180,7 @@ async function saveReviewItem(review) {
 
 async function handleImageUpload(file) {
   if (!file) return;
-  const id = editingProductId || newProductId();
+  const id = ensureEditingProductId();
   if (isSupabaseConfigured()) {
     const url = await supabaseUploadImage(file, id);
     $('#pf-image-url').value = url;
@@ -229,7 +234,10 @@ function bindEvents() {
     });
   });
 
-  $('#btn-add-product')?.addEventListener('click', () => fillProductForm());
+  $('#btn-add-product')?.addEventListener('click', () => {
+    editingProductId = null;
+    fillProductForm();
+  });
   $('#btn-close-form')?.addEventListener('click', () => $('#product-form').classList.remove('open'));
 
   $('#pf-trackSizes')?.addEventListener('change', (e) => {
@@ -255,16 +263,38 @@ function bindEvents() {
 
   $('#product-save-form')?.addEventListener('submit', async (e) => {
     e.preventDefault();
+    const form = e.target;
+    const btn = form.querySelector('[type="submit"]');
     const item = readProductForm();
+    if (!item.titleRu) {
+      showToast('Укажите название товара', false);
+      return;
+    }
+    btn.disabled = true;
+    btn.textContent = 'Сохранение…';
     try {
       await saveProduct(item);
-      try { localStorage.removeItem('unorobe_catalog_v1'); } catch (e) { /* ignore */ }
-      await loadAdminData();
-      renderProductsTable();
+      try { localStorage.removeItem('unorobe_catalog_v1'); } catch (err) { /* ignore */ }
       $('#product-form').classList.remove('open');
+      editingProductId = null;
       showToast('Товар сохранён — уже на сайте');
+      try {
+        await loadAdminData();
+        renderProductsTable();
+      } catch (reloadErr) {
+        console.warn('Reload after save:', reloadErr);
+        showToast('Сохранено. Обновите страницу, если список не обновился.', true);
+      }
     } catch (err) {
-      showToast(err.message, false);
+      const msg = err?.message || 'Ошибка сохранения';
+      if (msg.includes('JWT') || msg.includes('401') || msg.includes('403')) {
+        showToast('Сессия истекла — войдите заново', false);
+      } else {
+        showToast(msg, false);
+      }
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Сохранить товар';
     }
   });
 
