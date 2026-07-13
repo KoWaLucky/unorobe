@@ -2,6 +2,7 @@
 let adminCatalog = [];
 let adminReviews = [];
 let editingProductId = null;
+let productFilter = 'active';
 
 const $ = (sel) => document.querySelector(sel);
 
@@ -29,28 +30,52 @@ async function loadAdminData() {
   adminReviews = await fetchJson('data/reviews.json');
 }
 
+function getFilteredAdminProducts() {
+  if (productFilter === 'hidden') return adminCatalog.filter((p) => p.active === false);
+  if (productFilter === 'all') return adminCatalog;
+  return adminCatalog.filter((p) => p.active !== false);
+}
+
+function emptyProductsMessage() {
+  if (productFilter === 'hidden') return 'Скрытых товаров нет';
+  if (productFilter === 'all') return 'Нет товаров';
+  return 'Нет товаров на сайте';
+}
+
 function renderProductsTable() {
   const tbody = $('#products-table tbody');
   if (!tbody) return;
-  const items = adminCatalog.filter((p) => p.active !== false);
+  const items = getFilteredAdminProducts();
+  document.querySelectorAll('[data-product-filter]').forEach((btn) => {
+    btn.classList.toggle('active', btn.dataset.productFilter === productFilter);
+  });
   if (!items.length) {
-    tbody.innerHTML = '<tr><td colspan="6" class="text-muted">Нет товаров</td></tr>';
+    tbody.innerHTML = `<tr><td colspan="7" class="text-muted">${emptyProductsMessage()}</td></tr>`;
     return;
   }
   tbody.innerHTML = items.map((p) => {
+    const hidden = p.active === false;
     const sizes = p.trackSizes && p.sizes?.length
       ? p.sizes.map((s) => `${s.size}:${s.stock}`).join(', ')
       : '—';
-    return `<tr>
+    const status = hidden
+      ? '<span class="badge bg-secondary">Скрыт</span>'
+      : '<span class="badge bg-success">На сайте</span>';
+    const actions = hidden
+      ? `<button class="btn btn-sm btn-outline-dark" data-edit="${p.id}">Изменить</button>
+         <button class="btn btn-sm btn-outline-success" data-show="${p.id}">Показать</button>
+         <button class="btn btn-sm btn-outline-danger" data-hard-del="${p.id}">Удалить</button>`
+      : `<button class="btn btn-sm btn-outline-dark" data-edit="${p.id}">Изменить</button>
+         <button class="btn btn-sm btn-outline-secondary" data-hide="${p.id}">Скрыть</button>
+         <button class="btn btn-sm btn-outline-danger" data-hard-del="${p.id}">Удалить</button>`;
+    return `<tr class="${hidden ? 'product-row-hidden' : ''}">
       <td><img src="${p.image}" alt="" class="admin-thumb"></td>
       <td><strong>${p.titleRu || p.title}</strong><br><small class="text-muted">${p.sku}</small></td>
       <td>${Number(p.price).toLocaleString('ru-RU')} ₽</td>
       <td>${p.categoryRu || p.category}</td>
       <td>${sizes}</td>
-      <td class="text-end">
-        <button class="btn btn-sm btn-outline-dark" data-edit="${p.id}">Изменить</button>
-        <button class="btn btn-sm btn-outline-danger" data-del="${p.id}">Скрыть</button>
-      </td>
+      <td>${status}</td>
+      <td class="text-end"><div class="admin-actions">${actions}</div></td>
     </tr>`;
   }).join('');
 }
@@ -79,6 +104,7 @@ function fillProductForm(p = null) {
   $('#pf-description').value = p?.description || '';
   $('#pf-category').value = p?.category || 'midi';
   $('#pf-color').value = p?.color || 'other';
+  $('#pf-active').checked = p?.active !== false;
   $('#pf-available').checked = p?.available !== false;
   $('#pf-trackSizes').checked = !!p?.trackSizes;
   $('#pf-image-url').value = p?.image || '';
@@ -127,7 +153,7 @@ function readProductForm() {
     available: $('#pf-available').checked,
     trackSizes,
     sizes: trackSizes ? collectSizes() : [],
-    active: true,
+    active: $('#pf-active').checked,
   };
 }
 
@@ -196,6 +222,13 @@ function bindEvents() {
     tab.addEventListener('click', () => switchTab(tab.dataset.tab));
   });
 
+  document.querySelectorAll('[data-product-filter]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      productFilter = btn.dataset.productFilter;
+      renderProductsTable();
+    });
+  });
+
   $('#btn-add-product')?.addEventListener('click', () => fillProductForm());
   $('#btn-close-form')?.addEventListener('click', () => $('#product-form').classList.remove('open'));
 
@@ -236,17 +269,44 @@ function bindEvents() {
 
   $('#products-table')?.addEventListener('click', async (e) => {
     const editId = e.target.closest('[data-edit]')?.dataset.edit;
-    const delId = e.target.closest('[data-del]')?.dataset.del;
+    const hideId = e.target.closest('[data-hide]')?.dataset.hide;
+    const showId = e.target.closest('[data-show]')?.dataset.show;
+    const hardDelId = e.target.closest('[data-hard-del]')?.dataset.hardDel;
+
     if (editId) {
       fillProductForm(adminCatalog.find((p) => p.id === editId));
       return;
     }
-    if (delId && confirm('Скрыть товар из каталога?')) {
+    if (hideId && confirm('Скрыть товар с сайта? Его можно будет вернуть во вкладке «Скрытые».')) {
       try {
-        if (isSupabaseConfigured()) await supabaseDeleteProduct(delId);
+        if (isSupabaseConfigured()) await supabaseHideProduct(hideId);
         await loadAdminData();
         renderProductsTable();
-        showToast('Товар скрыт');
+        showToast('Товар скрыт с сайта');
+      } catch (err) {
+        showToast(err.message, false);
+      }
+      return;
+    }
+    if (showId) {
+      try {
+        if (isSupabaseConfigured()) await supabaseShowProduct(showId);
+        await loadAdminData();
+        productFilter = 'active';
+        renderProductsTable();
+        showToast('Товар снова на сайте');
+      } catch (err) {
+        showToast(err.message, false);
+      }
+      return;
+    }
+    if (hardDelId && confirm('Удалить товар навсегда? Это действие нельзя отменить.')) {
+      try {
+        if (isSupabaseConfigured()) await supabaseHardDeleteProduct(hardDelId);
+        await loadAdminData();
+        renderProductsTable();
+        if (editingProductId === hardDelId) $('#product-form').classList.remove('open');
+        showToast('Товар удалён');
       } catch (err) {
         showToast(err.message, false);
       }

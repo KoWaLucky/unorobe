@@ -102,12 +102,29 @@ async function supabaseSaveProduct(product) {
   });
 }
 
-async function supabaseDeleteProduct(id) {
+async function supabaseHideProduct(id) {
   await sbFetch(`products?id=eq.${encodeURIComponent(id)}`, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ active: false }),
   });
+}
+
+async function supabaseShowProduct(id) {
+  await sbFetch(`products?id=eq.${encodeURIComponent(id)}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ active: true }),
+  });
+}
+
+async function supabaseHardDeleteProduct(id) {
+  await sbFetch(`products?id=eq.${encodeURIComponent(id)}`, { method: 'DELETE' });
+}
+
+/** @deprecated use supabaseHideProduct */
+async function supabaseDeleteProduct(id) {
+  return supabaseHideProduct(id);
 }
 
 async function supabaseSaveReview(review) {

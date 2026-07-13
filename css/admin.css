@@ -70,6 +70,35 @@ body {
 .admin-panel { display: none; }
 .admin-panel.active { display: block; }
 
+.product-filter-bar {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.product-filter {
+  border: 1px solid #ddd;
+  background: #fff;
+  padding: 0.35rem 0.85rem;
+  font-size: 0.8rem;
+  border-radius: 999px;
+  color: #555;
+}
+.product-filter.active {
+  background: #111;
+  border-color: #111;
+  color: #fff;
+}
+tr.product-row-hidden {
+  opacity: 0.72;
+  background: #faf8f6;
+}
+.admin-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  justify-content: flex-end;
+}
+
 .admin-thumb {
   width: 48px;
   height: 60px;
