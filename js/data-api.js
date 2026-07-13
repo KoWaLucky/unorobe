@@ -56,7 +56,7 @@ async function loadCatalog() {
   if (isSupabaseConfigured()) {
     try {
       const data = await supabaseLoadCatalog();
-      if (data) {
+      if (data && data.length > 0) {
         PRODUCTS = data;
         return PRODUCTS;
       }

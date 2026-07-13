@@ -1,4 +1,4 @@
-const PRODUCTS = [
+window.PRODUCTS_STATIC = [
   {
     "id": 9221207785731,
     "title": "Azure Fringe Mini Dress",
@@ -950,4 +950,3 @@ const PRODUCTS = [
     "colorRu": "Другой"
   }
 ];
-window.PRODUCTS_STATIC = PRODUCTS;
