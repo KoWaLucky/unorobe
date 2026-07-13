@@ -382,13 +382,58 @@ function initHomeSwiperProducts() {
   const wrapper = document.getElementById('home-swiper-wrapper');
   if (!wrapper) return;
   wrapper.innerHTML = PRODUCTS.slice(0, 9).map(renderSwiperSlide).join('');
+  if (window.Swiper && document.querySelector('.product-Swiper')) {
+    new Swiper('.product-Swiper', {
+      slidesPerView: 1,
+      spaceBetween: 20,
+      navigation: {
+        nextEl: '.main-slider-button-next',
+        prevEl: '.main-slider-button-prev',
+      },
+      breakpoints: { 768: { slidesPerView: 3 }, 1200: { slidesPerView: 4 } },
+    });
+  }
 }
 
-function getProductById(id) {
-  return PRODUCTS.find((p) => String(p.id) === String(id));
+function initReviewsSection() {
+  const wrapper = document.getElementById('reviews-swiper-wrapper');
+  if (!wrapper) return;
+  const items = getApprovedReviews();
+  if (!items.length) {
+    wrapper.innerHTML = '<div class="swiper-slide"><p class="review fw-light fs-5">Пока нет отзывов — будьте первой!</p></div>';
+    return;
+  }
+  wrapper.innerHTML = items.map((r) => `
+    <div class="swiper-slide">
+      <p class="review fw-light fs-5 lh-base">"${r.text}"</p>
+      <span class="fw-bold d-block mt-3">${r.author.toUpperCase()}</span>
+    </div>`).join('');
+  if (window.Swiper && document.querySelector('.testimonial-Swiper')) {
+    new Swiper('.testimonial-Swiper', {
+      slidesPerView: 1,
+      spaceBetween: 30,
+      pagination: { el: '.testimonial-pagination', clickable: true },
+      autoplay: { delay: 5000 },
+    });
+  }
 }
 
-function initSingleProductPage() {
+function initReviewForm() {
+  const form = document.getElementById('public-review-form');
+  if (!form) return;
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const author = form.querySelector('[name="author"]').value.trim();
+    const text = form.querySelector('[name="text"]').value.trim();
+    if (!author || !text) return;
+    const msg = form.querySelector('.review-form-msg');
+    const payload = encodeURIComponent(`Отзыв для сайта UNO RÓBE\nИмя: ${author}\n\n${text}`);
+    window.open(`https://www.instagram.com/direct/t/unorobeofficial/?text=${payload}`, '_blank');
+    msg.textContent = 'Откроется Instagram Direct — отправьте сообщение, мы опубликуем отзыв после проверки.';
+    form.reset();
+  });
+}
+
   const params = new URLSearchParams(window.location.search);
   const product = getProductById(params.get('id'));
   if (!product) return;
@@ -404,7 +449,7 @@ function initSingleProductPage() {
   setText('[data-product-price]', product.priceFormatted);
   setText('[data-product-desc]', product.descriptionRu || product.description || 'Элегантная модель из коллекции UNO RÓBE.');
   setText('[data-tab-description]', product.descriptionRu || product.description || 'Элегантная модель из коллекции UNO RÓBE.');
-  setText('[data-product-sku]', String(product.id));
+  setText('[data-product-sku]', product.sku || String(product.id));
   setText('[data-product-category]', product.categoryRu || 'Платья');
 
   document.querySelectorAll('[data-product-category]').forEach((el) => {
@@ -426,9 +471,19 @@ function initSingleProductPage() {
   let selectedSize = 'M';
   const sizeList = document.getElementById('size-select');
   if (sizeList) {
+    if (product.trackSizes && product.sizes?.length) {
+      sizeList.innerHTML = product.sizes.map((s, i) => {
+        const disabled = s.stock <= 0 ? ' disabled' : '';
+        const active = i === 0 && s.stock > 0 ? ' active' : '';
+        const label = s.stock > 0 ? s.size : `${s.size} (нет)`;
+        return `<li data-size="${s.size}" class="select-item pe-3"><a href="#" class="btn btn-light fs-6${active}${disabled}">${label}</a></li>`;
+      }).join('');
+      const first = product.sizes.find((s) => s.stock > 0);
+      selectedSize = first ? first.size : product.sizes[0].size;
+    }
     sizeList.addEventListener('click', (e) => {
       const li = e.target.closest('[data-size]');
-      if (!li) return;
+      if (!li || e.target.classList.contains('disabled')) return;
       e.preventDefault();
       sizeList.querySelectorAll('a').forEach((a) => a.classList.remove('active'));
       li.querySelector('a')?.classList.add('active');
@@ -468,10 +523,14 @@ function initHeaderScroll() {
   window.addEventListener('scroll', onScroll, { passive: true });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+  await loadCatalog();
+  await loadReviews();
   initHomeSwiperProducts();
   initShopPage();
   initSingleProductPage();
   initCart();
   initHeaderScroll();
+  initReviewsSection();
+  initReviewForm();
 });

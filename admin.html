@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Админка — UNO RÓBE</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+  <div id="login-screen" class="login-screen">
+    <form id="login-form" class="login-card">
+      <h1 class="h4 mb-1">UNO RÓBE</h1>
+      <p class="text-muted small mb-4">Админ-панель каталога</p>
+      <label class="form-label small">Пароль</label>
+      <input type="password" id="login-password" class="form-control mb-3" required autocomplete="current-password">
+      <label class="form-label small">GitHub Token <span class="text-muted">(scope: repo)</span></label>
+      <input type="password" id="login-token" class="form-control mb-2" required placeholder="ghp_..." autocomplete="off">
+      <p class="small text-muted mb-4">Создайте на github.com → Settings → Developer settings → Tokens (classic) → Generate new token → отметьте <strong>repo</strong>. Токен хранится только в этой вкладке браузера.</p>
+      <button type="submit" class="btn btn-dark w-100">Войти</button>
+    </form>
+  </div>
+
+  <div id="admin-app" class="admin-app hidden">
+    <header class="admin-top">
+      <div>
+        <strong>UNO RÓBE</strong> <span class="text-muted">админка</span>
+      </div>
+      <div class="d-flex align-items-center gap-3">
+        <span id="gh-user" class="small text-muted"></span>
+        <button id="btn-logout" class="btn btn-sm btn-outline-secondary">Выйти</button>
+      </div>
+    </header>
+
+    <nav class="admin-tabs">
+      <button class="admin-tab active" data-tab="products">Каталог</button>
+      <button class="admin-tab" data-tab="reviews">Отзывы</button>
+    </nav>
+
+    <main class="admin-main">
+      <section id="panel-products" class="admin-panel active">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h2 class="h5 m-0">Товары</h2>
+          <button id="btn-add-product" class="btn btn-dark btn-sm">+ Добавить товар</button>
+        </div>
+        <div class="table-responsive">
+          <table id="products-table" class="table align-middle">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Название</th>
+                <th>Цена</th>
+                <th>Категория</th>
+                <th>Размеры</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="panel-reviews" class="admin-panel">
+        <h2 class="h5 mb-4">Отзывы</h2>
+        <form id="review-add-form" class="review-form mb-4">
+          <div class="row g-2">
+            <div class="col-md-3">
+              <input type="text" id="rv-author" class="form-control" placeholder="Имя" required>
+            </div>
+            <div class="col-md-2">
+              <select id="rv-rating" class="form-select">
+                <option value="5">5 ★</option>
+                <option value="4">4 ★</option>
+                <option value="3">3 ★</option>
+              </select>
+            </div>
+            <div class="col-md-5">
+              <input type="text" id="rv-text" class="form-control" placeholder="Текст отзыва" required>
+            </div>
+            <div class="col-md-2 d-flex align-items-center gap-2">
+              <label class="small"><input type="checkbox" id="rv-approved" checked> Сразу показать</label>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-dark btn-sm mt-2">Добавить отзыв</button>
+        </form>
+        <div class="table-responsive">
+          <table id="reviews-table" class="table align-middle">
+            <thead>
+              <tr>
+                <th>Имя</th>
+                <th>Текст</th>
+                <th>Оценка</th>
+                <th>На сайте</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <aside id="product-form" class="product-drawer">
+    <div class="drawer-inner">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 id="product-form-title" class="h5 m-0">Новый товар</h3>
+        <button id="btn-close-form" type="button" class="btn-close"></button>
+      </div>
+      <form id="product-save-form">
+        <p class="small text-muted">Артикул: <strong id="pf-sku">UR-0001</strong> (генерируется автоматически)</p>
+
+        <label class="form-label">Название (RU) *</label>
+        <input type="text" id="pf-titleRu" class="form-control mb-3" required>
+
+        <label class="form-label">Название (EN, необязательно)</label>
+        <input type="text" id="pf-title" class="form-control mb-3">
+
+        <div class="row mb-3">
+          <div class="col-6">
+            <label class="form-label">Цена, ₽ *</label>
+            <input type="number" id="pf-price" class="form-control" min="0" step="100" required>
+          </div>
+          <div class="col-6">
+            <label class="form-label">Категория</label>
+            <select id="pf-category" class="form-select">
+              <option value="mini">Мини</option>
+              <option value="midi">Миди</option>
+              <option value="maxi">Макси</option>
+              <option value="outer">Жакеты и блузы</option>
+            </select>
+          </div>
+        </div>
+
+        <label class="form-label">Описание</label>
+        <textarea id="pf-description" class="form-control mb-3" rows="4"></textarea>
+
+        <label class="form-label">Цвет (для фильтра)</label>
+        <select id="pf-color" class="form-select mb-3">
+          <option value="black">Чёрный</option>
+          <option value="white">Белый</option>
+          <option value="light">Светлый</option>
+          <option value="red">Красный</option>
+          <option value="other">Другой</option>
+        </select>
+
+        <label class="form-label">Фото</label>
+        <div class="d-flex gap-3 mb-2 align-items-start">
+          <img id="pf-image-preview" src="" alt="" class="admin-preview">
+          <div class="flex-grow-1">
+            <input type="file" id="pf-image-file" class="form-control mb-2" accept="image/*">
+            <input type="text" id="pf-image-url" class="form-control form-control-sm" placeholder="images/products/....jpg">
+          </div>
+        </div>
+
+        <div class="form-check mb-2">
+          <input class="form-check-input" type="checkbox" id="pf-available" checked>
+          <label class="form-check-label" for="pf-available">В наличии</label>
+        </div>
+        <div class="form-check mb-3">
+          <input class="form-check-input" type="checkbox" id="pf-trackSizes">
+          <label class="form-check-label" for="pf-trackSizes">Учитывать размеры и остатки</label>
+        </div>
+
+        <div id="sizes-block" style="display:none" class="mb-3">
+          <label class="form-label">Размеры и количество</label>
+          <div id="sizes-list"></div>
+          <button type="button" id="btn-add-size" class="btn btn-sm btn-outline-secondary mt-2">+ Размер</button>
+        </div>
+
+        <button type="submit" class="btn btn-dark w-100">Сохранить товар</button>
+      </form>
+    </div>
+  </aside>
+
+  <div id="admin-toast" class="admin-toast"></div>
+
+  <script src="js/config.js"></script>
+  <script src="js/data-api.js"></script>
+  <script src="js/github-api.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

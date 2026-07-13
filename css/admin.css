@@ -1,0 +1,127 @@
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background: #f6f4f1;
+  color: #111;
+}
+
+.hidden { display: none !important; }
+
+.login-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+.login-card {
+  background: #fff;
+  border: 1px solid #e8e4df;
+  padding: 2rem;
+  max-width: 420px;
+  width: 100%;
+}
+
+.admin-top {
+  background: #111;
+  color: #fff;
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.admin-tabs {
+  display: flex;
+  gap: 0;
+  background: #fff;
+  border-bottom: 1px solid #e8e4df;
+  padding: 0 1.5rem;
+}
+.admin-tab {
+  border: none;
+  background: none;
+  padding: 1rem 1.25rem;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #666;
+  border-bottom: 2px solid transparent;
+}
+.admin-tab.active {
+  color: #111;
+  border-bottom-color: #111;
+}
+
+.admin-main {
+  padding: 1.5rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.admin-panel { display: none; }
+.admin-panel.active { display: block; }
+
+.admin-thumb {
+  width: 48px;
+  height: 60px;
+  object-fit: cover;
+}
+.admin-preview {
+  width: 80px;
+  height: 100px;
+  object-fit: cover;
+  background: #eee;
+}
+
+.product-drawer {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 1000;
+  display: none;
+  justify-content: flex-end;
+}
+.product-drawer.open { display: flex; }
+.drawer-inner {
+  background: #fff;
+  width: min(480px, 100%);
+  height: 100%;
+  overflow-y: auto;
+  padding: 1.5rem;
+  box-shadow: -4px 0 24px rgba(0,0,0,0.12);
+}
+
+.size-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.size-row .size-name { max-width: 80px; }
+.size-row .size-stock { max-width: 80px; }
+
+.admin-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: #111;
+  color: #fff;
+  padding: 12px 20px;
+  font-size: 0.9rem;
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  z-index: 2000;
+  pointer-events: none;
+}
+.admin-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+.admin-toast.err { background: #8b2635; }
+
+.review-form {
+  background: #fff;
+  border: 1px solid #e8e4df;
+  padding: 1rem;
+}
+
+.table { background: #fff; }

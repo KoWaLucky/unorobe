@@ -249,25 +249,25 @@
         <h3 class="display-1 mb-5 text-muted opacity-25 ">ОТЗЫВЫ КЛИЕНТОК</h3>
         <div class="container">
             <div class="swiper testimonial-Swiper text-center">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                        <p class="review fw-light fs-5 lh-base">"Платье село идеально — получила массу комплиментов на мероприятии."</p>
-                        <span class="fw-bold d-block mt-3">АНАСТАСИЯ</span>
-                    </div>
-                    <div class="swiper-slide">
-                        <p class="review fw-light fs-5 lh-base">"Качество ткани и посадка на высоте. Заказывала через Direct — всё быстро."</p>
-                        <span class="fw-bold d-block mt-3">МАРИЯ</span>
-                    </div>
-                    <div class="swiper-slide">
-                        <p class="review fw-light fs-5 lh-base">"UNO RÓBE — это про элегантность без лишнего. Уже взяла второе платье."</p>
-                        <span class="fw-bold d-block mt-3">ЕЛЕНА</span>
-                    </div>
-                    <div class="swiper-slide">
-                        <p class="review fw-light fs-5 lh-base">"Стильный бренд из Краснодара. Рекомендую всем, кто любит женственные силуэты."</p>
-                        <span class="fw-bold d-block mt-3">ДАРЬЯ</span>
-                    </div>
-                </div>
+                <div class="swiper-wrapper" id="reviews-swiper-wrapper"></div>
                 <div class="swiper-pagination testimonial-pagination position-relative mt-5"></div>
+            </div>
+            <div class="row justify-content-center mt-5 pt-4">
+                <div class="col-lg-6">
+                    <h4 class="h6 text-uppercase text-center mb-3" style="letter-spacing:.15em;">Оставить отзыв</h4>
+                    <form id="public-review-form" class="review-submit-form">
+                        <div class="row g-2">
+                            <div class="col-md-4">
+                                <input type="text" name="author" class="form-control rounded-0" placeholder="Ваше имя" required>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" name="text" class="form-control rounded-0" placeholder="Ваш отзыв" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-outline-dark rounded-0 w-100 mt-2">Отправить в Instagram</button>
+                        <p class="review-form-msg small text-muted text-center mt-2 mb-0"></p>
+                    </form>
+                </div>
             </div>
         </div>
     </section>
@@ -404,6 +404,8 @@
         crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
     <script type="text/javascript" src="js/plugins.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/data-api.js"></script>
     <script src="js/products.js"></script>
     <script src="js/unorobe.js"></script>
     <script type="text/javascript" src="js/script.js"></script>

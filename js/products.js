@@ -950,3 +950,4 @@ const PRODUCTS = [
     "colorRu": "Другой"
   }
 ];
+window.PRODUCTS_STATIC = PRODUCTS;
