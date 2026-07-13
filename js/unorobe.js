@@ -342,12 +342,21 @@ function renderShopProducts() {
     : '<div class="col-12"><p class="text-muted py-5 text-center">По вашему запросу ничего не найдено. Попробуйте изменить фильтры.</p></div>';
 }
 
+let shopPageInitialized = false;
+
+function refreshShopPage() {
+  if (!document.getElementById('product-grid')) return;
+  renderShopSidebar();
+  renderShopProducts();
+}
+
 function initShopPage() {
   const grid = document.getElementById('product-grid');
   if (!grid) return;
 
-  renderShopSidebar();
-  renderShopProducts();
+  refreshShopPage();
+  if (shopPageInitialized) return;
+  shopPageInitialized = true;
 
   document.getElementById('shop-search')?.addEventListener('input', (e) => {
     shopState.query = e.target.value.trim();
@@ -540,21 +549,70 @@ function initHeaderScroll() {
   window.addEventListener('scroll', onScroll, { passive: true });
 }
 
+function initSearchPopup() {
+  const popup = document.querySelector('.search-popup');
+  if (!popup) return;
+
+  const open = () => popup.classList.add('is-visible');
+  const close = () => popup.classList.remove('is-visible');
+
+  document.querySelectorAll('.search-button, .search-popup-trigger').forEach((el) => {
+    el.addEventListener('click', (e) => {
+      e.preventDefault();
+      open();
+      setTimeout(() => popup.querySelector('#search-popup, input[type="search"], input[type="text"]')?.focus(), 200);
+    });
+  });
+  document.querySelectorAll('.btn-close-search, .search-popup-close').forEach((el) => {
+    el.addEventListener('click', (e) => { e.preventDefault(); close(); });
+  });
+  popup.addEventListener('click', (e) => {
+    if (e.target === popup || e.target.closest('.search-popup-close')) close();
+  });
+  document.addEventListener('keyup', (e) => {
+    if (e.key === 'Escape') close();
+  });
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
+  initHeaderScroll();
+  initCart();
+  initSearchPopup();
+  initReviewForm();
+
+  const hadCatalogCache = applyCachedCatalog();
+  const hadReviewsCache = applyCachedReviews();
+
+  if (hadCatalogCache) {
+    initHomeSwiperProducts();
+    initShopPage();
+    initSingleProductPage();
+  }
+  if (hadReviewsCache) initReviewsSection();
+
+  const needsReviews = document.getElementById('reviews-swiper-wrapper');
+
   try {
-    await loadCatalog();
-    await loadReviews();
+    await Promise.all([
+      loadCatalog(),
+      needsReviews ? loadReviews() : Promise.resolve(),
+    ]);
   } catch (e) {
     console.error('UNO RÓBE data load failed:', e);
     if (!PRODUCTS.length && typeof window.PRODUCTS_STATIC !== 'undefined') {
       PRODUCTS = window.PRODUCTS_STATIC.map(normalizeProduct);
     }
   }
-  initHomeSwiperProducts();
-  initShopPage();
-  initSingleProductPage();
-  initCart();
-  initHeaderScroll();
-  initReviewsSection();
-  initReviewForm();
+
+  if (!hadCatalogCache) {
+    initHomeSwiperProducts();
+    initShopPage();
+    initSingleProductPage();
+  } else {
+    refreshShopPage();
+    if (document.getElementById('home-swiper-wrapper')) initHomeSwiperProducts();
+    initSingleProductPage();
+  }
+
+  if (needsReviews) initReviewsSection();
 });

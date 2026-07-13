@@ -9,6 +9,42 @@ const CATEGORY_LABELS = {
 let PRODUCTS = [];
 let REVIEWS = [];
 
+const CATALOG_CACHE_KEY = 'unorobe_catalog_v1';
+const REVIEWS_CACHE_KEY = 'unorobe_reviews_v1';
+const CACHE_TTL_MS = 15 * 60 * 1000;
+
+function readCache(key) {
+  try {
+    const raw = localStorage.getItem(key);
+    if (!raw) return null;
+    const { ts, data } = JSON.parse(raw);
+    if (!data || Date.now() - ts > CACHE_TTL_MS) return null;
+    return data;
+  } catch (e) {
+    return null;
+  }
+}
+
+function writeCache(key, data) {
+  try {
+    localStorage.setItem(key, JSON.stringify({ ts: Date.now(), data }));
+  } catch (e) { /* quota */ }
+}
+
+function applyCachedCatalog() {
+  const cached = readCache(CATALOG_CACHE_KEY);
+  if (!cached?.length) return false;
+  PRODUCTS = cached.map((p) => ({ ...p, priceFormatted: p.priceFormatted || formatPrice(p.price) }));
+  return true;
+}
+
+function applyCachedReviews() {
+  const cached = readCache(REVIEWS_CACHE_KEY);
+  if (!cached) return false;
+  REVIEWS = cached;
+  return true;
+}
+
 function formatPrice(n) {
   return `${Math.round(Number(n)).toLocaleString('ru-RU')} ₽`;
 }
@@ -45,32 +81,48 @@ function dataBaseUrl() {
 }
 
 async function fetchJson(path) {
+  const localUrl = path.startsWith('http') ? path : `${path}?v=${Math.floor(Date.now() / CACHE_TTL_MS)}`;
+  try {
+    const localRes = await fetch(localUrl);
+    if (localRes.ok) return localRes.json();
+  } catch (e) { /* offline */ }
+
   const base = dataBaseUrl();
-  const url = base ? `${base}/${path}?t=${Date.now()}` : path;
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`Не удалось загрузить ${path}`);
-  return res.json();
+  if (base) {
+    const remoteRes = await fetch(`${base}/${path}?t=${Date.now()}`);
+    if (remoteRes.ok) return remoteRes.json();
+  }
+  throw new Error(`Не удалось загрузить ${path}`);
 }
 
 async function loadCatalog() {
+  const tasks = [];
+
   if (isSupabaseConfigured()) {
-    try {
-      const data = await supabaseLoadCatalog();
-      if (data && data.length > 0) {
-        PRODUCTS = data;
-        return PRODUCTS;
-      }
-    } catch (e) {
-      console.warn('Supabase catalog fallback:', e.message);
-    }
+    tasks.push(
+      supabaseLoadCatalog().then((data) => {
+        if (data?.length) return data;
+        throw new Error('Supabase catalog empty');
+      })
+    );
   }
+
+  tasks.push(
+    fetchJson('data/catalog.json').then((data) => {
+      const items = data.filter((p) => p.active !== false).map(normalizeProduct);
+      if (items.length) return items;
+      throw new Error('Local catalog empty');
+    })
+  );
+
   try {
-    const data = await fetchJson('data/catalog.json');
-    PRODUCTS = data.filter((p) => p.active !== false).map(normalizeProduct);
+    PRODUCTS = await Promise.any(tasks);
+    writeCache(CATALOG_CACHE_KEY, PRODUCTS);
     return PRODUCTS;
   } catch (e) {
     if (typeof window.PRODUCTS_STATIC !== 'undefined') {
       PRODUCTS = window.PRODUCTS_STATIC.map(normalizeProduct);
+      writeCache(CATALOG_CACHE_KEY, PRODUCTS);
       return PRODUCTS;
     }
     PRODUCTS = [];
@@ -84,6 +136,7 @@ async function loadReviews() {
       const data = await supabaseLoadReviews();
       if (data) {
         REVIEWS = data;
+        writeCache(REVIEWS_CACHE_KEY, data);
         return REVIEWS;
       }
     } catch (e) {
@@ -92,6 +145,7 @@ async function loadReviews() {
   }
   try {
     REVIEWS = await fetchJson('data/reviews.json');
+    writeCache(REVIEWS_CACHE_KEY, REVIEWS);
     return REVIEWS;
   } catch (e) {
     REVIEWS = [];
