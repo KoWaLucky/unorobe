@@ -53,6 +53,17 @@ async function fetchJson(path) {
 }
 
 async function loadCatalog() {
+  if (isSupabaseConfigured()) {
+    try {
+      const data = await supabaseLoadCatalog();
+      if (data) {
+        PRODUCTS = data;
+        return PRODUCTS;
+      }
+    } catch (e) {
+      console.warn('Supabase catalog fallback:', e.message);
+    }
+  }
   try {
     const data = await fetchJson('data/catalog.json');
     PRODUCTS = data.filter((p) => p.active !== false).map(normalizeProduct);
@@ -68,6 +79,17 @@ async function loadCatalog() {
 }
 
 async function loadReviews() {
+  if (isSupabaseConfigured()) {
+    try {
+      const data = await supabaseLoadReviews();
+      if (data) {
+        REVIEWS = data;
+        return REVIEWS;
+      }
+    } catch (e) {
+      console.warn('Supabase reviews fallback:', e.message);
+    }
+  }
   try {
     REVIEWS = await fetchJson('data/reviews.json');
     return REVIEWS;

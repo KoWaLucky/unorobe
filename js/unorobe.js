@@ -421,12 +421,28 @@ function initReviewsSection() {
 function initReviewForm() {
   const form = document.getElementById('public-review-form');
   if (!form) return;
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const author = form.querySelector('[name="author"]').value.trim();
     const text = form.querySelector('[name="text"]').value.trim();
     if (!author || !text) return;
     const msg = form.querySelector('.review-form-msg');
+    if (isSupabaseConfigured()) {
+      try {
+        await supabaseSubmitPublicReview({
+          id: `r${Date.now()}`,
+          author,
+          text,
+          rating: 5,
+        });
+        msg.textContent = 'Спасибо! Отзыв отправлен на модерацию — появится после проверки.';
+        form.reset();
+        return;
+      } catch (err) {
+        msg.textContent = 'Не удалось отправить. Напишите нам в Instagram.';
+        return;
+      }
+    }
     const payload = encodeURIComponent(`Отзыв для сайта UNO RÓBE\nИмя: ${author}\n\n${text}`);
     window.open(`https://www.instagram.com/direct/t/unorobeofficial/?text=${payload}`, '_blank');
     msg.textContent = 'Откроется Instagram Direct — отправьте сообщение, мы опубликуем отзыв после проверки.';

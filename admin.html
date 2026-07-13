@@ -12,14 +12,24 @@
   <div id="login-screen" class="login-screen">
     <form id="login-form" class="login-card">
       <h1 class="h4 mb-1">UNO RÓBE</h1>
-      <p class="text-muted small mb-4">Админ-панель каталога</p>
+      <p class="text-muted small mb-4">Админ-панель — вход по email и паролю</p>
+      <label class="form-label small">Email</label>
+      <input type="email" id="login-email" class="form-control mb-3" required autocomplete="username">
       <label class="form-label small">Пароль</label>
-      <input type="password" id="login-password" class="form-control mb-3" required autocomplete="current-password">
-      <label class="form-label small">GitHub Token <span class="text-muted">(scope: repo)</span></label>
-      <input type="password" id="login-token" class="form-control mb-2" required placeholder="ghp_..." autocomplete="off">
-      <p class="small text-muted mb-4">Создайте на github.com → Settings → Developer settings → Tokens (classic) → Generate new token → отметьте <strong>repo</strong>. Токен хранится только в этой вкладке браузера.</p>
+      <input type="password" id="login-password" class="form-control mb-4" required autocomplete="current-password">
       <button type="submit" class="btn btn-dark w-100">Войти</button>
     </form>
+    <div id="setup-notice" class="setup-notice">
+      <h2 class="h6">Первоначальная настройка (один раз)</h2>
+      <ol class="small">
+        <li>Зарегистрируйтесь на <a href="https://supabase.com" target="_blank" rel="noopener">supabase.com</a> (бесплатно)</li>
+        <li>Создайте проект → SQL Editor → вставьте код из <code>supabase/schema.sql</code></li>
+        <li>Storage → New bucket → имя <code>products</code> → Public</li>
+        <li>Authentication → Users → Add user (email + пароль для входа в админку)</li>
+        <li>Settings → API → скопируйте URL и anon key в <code>js/config.js</code></li>
+        <li>Загрузите сайт на GitHub Pages заново</li>
+      </ol>
+    </div>
   </div>
 
   <div id="admin-app" class="admin-app hidden">
@@ -28,7 +38,7 @@
         <strong>UNO RÓBE</strong> <span class="text-muted">админка</span>
       </div>
       <div class="d-flex align-items-center gap-3">
-        <span id="gh-user" class="small text-muted"></span>
+        <span id="admin-user" class="small text-muted"></span>
         <button id="btn-logout" class="btn btn-sm btn-outline-secondary">Выйти</button>
       </div>
     </header>
@@ -42,7 +52,10 @@
       <section id="panel-products" class="admin-panel active">
         <div class="d-flex justify-content-between align-items-center mb-4">
           <h2 class="h5 m-0">Товары</h2>
-          <button id="btn-add-product" class="btn btn-dark btn-sm">+ Добавить товар</button>
+          <div class="d-flex gap-2">
+            <button id="btn-import-json" class="btn btn-outline-secondary btn-sm">Импорт из JSON</button>
+            <button id="btn-add-product" class="btn btn-dark btn-sm">+ Добавить товар</button>
+          </div>
         </div>
         <div class="table-responsive">
           <table id="products-table" class="table align-middle">
@@ -176,9 +189,10 @@
 
   <div id="admin-toast" class="admin-toast"></div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/config.js"></script>
   <script src="js/data-api.js"></script>
-  <script src="js/github-api.js"></script>
+  <script src="js/supabase-api.js"></script>
   <script src="js/admin.js"></script>
 </body>
 </html>

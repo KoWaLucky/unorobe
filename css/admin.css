@@ -9,10 +9,20 @@ body {
 .login-screen {
   min-height: 100vh;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 2rem;
+  gap: 1.5rem;
 }
+.setup-notice {
+  background: #fff;
+  border: 1px solid #e8e4df;
+  padding: 1.25rem 1.5rem;
+  max-width: 520px;
+  width: 100%;
+}
+.setup-notice ol { margin-bottom: 0; padding-left: 1.2rem; }
 .login-card {
   background: #fff;
   border: 1px solid #e8e4df;

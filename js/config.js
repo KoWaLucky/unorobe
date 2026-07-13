@@ -1,8 +1,6 @@
 const UNOROBE_CONFIG = {
-  github: {
-    owner: 'KoWaLucky',
-    repo: 'unorobe',
-    branch: 'main',
+  supabase: {
+    url: '',
+    anonKey: '',
   },
-  adminPassword: 'uno-robe-2026',
 };

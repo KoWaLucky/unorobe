@@ -1,6 +1,4 @@
-/* UNO RÓBE — админ-панель */
-const ADMIN_SESSION = 'unorobe_admin_ok';
-
+/* UNO RÓBE — админ-панель (вход: email + пароль) */
 let adminCatalog = [];
 let adminReviews = [];
 let editingProductId = null;
@@ -16,33 +14,17 @@ function showToast(msg, ok = true) {
   showToast._t = setTimeout(() => el.classList.remove('show'), 3200);
 }
 
-function isLoggedIn() {
-  return sessionStorage.getItem(ADMIN_SESSION) === '1';
-}
-
-function login(password, token) {
-  if (password !== UNOROBE_CONFIG.adminPassword) {
-    throw new Error('Неверный пароль');
-  }
-  if (!token || token.length < 20) {
-    throw new Error('Нужен GitHub Token (classic, scope: repo)');
-  }
-  setGhToken(token);
-  sessionStorage.setItem(ADMIN_SESSION, '1');
-}
-
-function logout() {
-  sessionStorage.removeItem(ADMIN_SESSION);
-  setGhToken('');
-  location.reload();
-}
-
 function switchTab(name) {
   document.querySelectorAll('.admin-tab').forEach((t) => t.classList.toggle('active', t.dataset.tab === name));
   document.querySelectorAll('.admin-panel').forEach((p) => p.classList.toggle('active', p.id === `panel-${name}`));
 }
 
 async function loadAdminData() {
+  if (isSupabaseConfigured()) {
+    adminCatalog = await supabaseLoadCatalog(true);
+    adminReviews = await supabaseLoadReviews(true);
+    return;
+  }
   adminCatalog = await fetchJson('data/catalog.json');
   adminReviews = await fetchJson('data/reviews.json');
 }
@@ -50,11 +32,12 @@ async function loadAdminData() {
 function renderProductsTable() {
   const tbody = $('#products-table tbody');
   if (!tbody) return;
-  if (!adminCatalog.length) {
+  const items = adminCatalog.filter((p) => p.active !== false);
+  if (!items.length) {
     tbody.innerHTML = '<tr><td colspan="6" class="text-muted">Нет товаров</td></tr>';
     return;
   }
-  tbody.innerHTML = adminCatalog.map((p) => {
+  tbody.innerHTML = items.map((p) => {
     const sizes = p.trackSizes && p.sizes?.length
       ? p.sizes.map((s) => `${s.size}:${s.stock}`).join(', ')
       : '—';
@@ -99,7 +82,7 @@ function fillProductForm(p = null) {
   $('#pf-available').checked = p?.available !== false;
   $('#pf-trackSizes').checked = !!p?.trackSizes;
   $('#pf-image-url').value = p?.image || '';
-  $('#pf-image-preview').src = p?.image ? p.image : '';
+  $('#pf-image-preview').src = p?.image || '';
   $('#pf-sku').textContent = p?.sku || nextSku(adminCatalog);
   $('#sizes-block').style.display = p?.trackSizes ? '' : 'none';
   renderSizesInputs(p?.sizes || []);
@@ -148,42 +131,66 @@ function readProductForm() {
   };
 }
 
-async function saveAll() {
-  await saveCatalog(adminCatalog);
-  await saveReviews(adminReviews);
-  showToast('Сохранено в GitHub. Сайт обновится через 1–2 мин.');
+async function saveProduct(item) {
+  if (isSupabaseConfigured()) {
+    await supabaseSaveProduct(item);
+    return;
+  }
+  throw new Error('Supabase не настроен — см. инструкцию на экране входа');
+}
+
+async function saveReviewItem(review) {
+  if (isSupabaseConfigured()) {
+    await supabaseSaveReview(review);
+    return;
+  }
+  throw new Error('Supabase не настроен');
 }
 
 async function handleImageUpload(file) {
   if (!file) return;
   const id = editingProductId || newProductId();
-  const ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
-  const path = `images/products/${id}.${ext}`;
-  await uploadImage(path, file);
-  $('#pf-image-url').value = path;
-  $('#pf-image-preview').src = `/${path}`;
-  showToast('Фото загружено');
+  if (isSupabaseConfigured()) {
+    const url = await supabaseUploadImage(file, id);
+    $('#pf-image-url').value = url;
+    $('#pf-image-preview').src = url;
+    showToast('Фото загружено');
+    return;
+  }
+  throw new Error('Загрузка фото доступна после настройки Supabase');
+}
+
+function showSetupNotice() {
+  const el = $('#setup-notice');
+  if (!el) return;
+  el.classList.toggle('hidden', isSupabaseConfigured());
 }
 
 function bindEvents() {
   $('#login-form')?.addEventListener('submit', async (e) => {
     e.preventDefault();
+    if (!isSupabaseConfigured()) {
+      showToast('Сначала настройте Supabase (инструкция ниже)', false);
+      return;
+    }
     try {
-      login($('#login-password').value, $('#login-token').value);
-      const user = await verifyGhToken();
+      const user = await supabaseSignIn($('#login-email').value.trim(), $('#login-password').value);
       $('#login-screen').classList.add('hidden');
       $('#admin-app').classList.remove('hidden');
-      $('#gh-user').textContent = `@${user}`;
+      $('#admin-user').textContent = user.email;
       await loadAdminData();
       renderProductsTable();
       renderReviewsTable();
       showToast('Вход выполнен');
     } catch (err) {
-      showToast(err.message, false);
+      showToast(err.message || 'Ошибка входа', false);
     }
   });
 
-  $('#btn-logout')?.addEventListener('click', logout);
+  $('#btn-logout')?.addEventListener('click', async () => {
+    await supabaseSignOut();
+    location.reload();
+  });
 
   document.querySelectorAll('.admin-tab').forEach((tab) => {
     tab.addEventListener('click', () => switchTab(tab.dataset.tab));
@@ -197,9 +204,7 @@ function bindEvents() {
   });
 
   $('#btn-add-size')?.addEventListener('click', () => {
-    const sizes = collectSizes();
-    sizes.push({ size: '', stock: 0 });
-    renderSizesInputs(sizes);
+    renderSizesInputs(collectSizes().concat([{ size: '', stock: 0 }]));
   });
 
   $('#sizes-list')?.addEventListener('click', (e) => {
@@ -218,14 +223,12 @@ function bindEvents() {
   $('#product-save-form')?.addEventListener('submit', async (e) => {
     e.preventDefault();
     const item = readProductForm();
-    const idx = adminCatalog.findIndex((p) => p.id === item.id);
-    if (idx >= 0) adminCatalog[idx] = item;
-    else adminCatalog.unshift(item);
     try {
-      await saveCatalog(adminCatalog);
+      await saveProduct(item);
+      await loadAdminData();
       renderProductsTable();
       $('#product-form').classList.remove('open');
-      showToast('Товар сохранён');
+      showToast('Товар сохранён — уже на сайте');
     } catch (err) {
       showToast(err.message, false);
     }
@@ -238,13 +241,10 @@ function bindEvents() {
       fillProductForm(adminCatalog.find((p) => p.id === editId));
       return;
     }
-    if (delId) {
-      if (!confirm('Скрыть товар из каталога?')) return;
-      const p = adminCatalog.find((x) => x.id === delId);
-      if (p) p.active = false;
-      adminCatalog = adminCatalog.filter((x) => x.active !== false);
+    if (delId && confirm('Скрыть товар из каталога?')) {
       try {
-        await saveCatalog(adminCatalog);
+        if (isSupabaseConfigured()) await supabaseDeleteProduct(delId);
+        await loadAdminData();
         renderProductsTable();
         showToast('Товар скрыт');
       } catch (err) {
@@ -255,15 +255,16 @@ function bindEvents() {
 
   $('#review-add-form')?.addEventListener('submit', async (e) => {
     e.preventDefault();
-    adminReviews.unshift({
+    const review = {
       id: `r${Date.now()}`,
       author: $('#rv-author').value.trim(),
       text: $('#rv-text').value.trim(),
       rating: parseInt($('#rv-rating').value, 10) || 5,
       approved: $('#rv-approved').checked,
-    });
+    };
     try {
-      await saveReviews(adminReviews);
+      await saveReviewItem(review);
+      await loadAdminData();
       renderReviewsTable();
       e.target.reset();
       showToast('Отзыв добавлен');
@@ -277,20 +278,21 @@ function bindEvents() {
     const delId = e.target.closest('[data-del-review]')?.dataset.delReview;
     if (approveId) {
       const r = adminReviews.find((x) => x.id === approveId);
-      if (r) r.approved = true;
-      try {
-        await saveReviews(adminReviews);
-        renderReviewsTable();
-        showToast('Отзыв опубликован');
-      } catch (err) {
-        showToast(err.message, false);
+      if (r) {
+        try {
+          await saveReviewItem({ ...r, approved: true });
+          await loadAdminData();
+          renderReviewsTable();
+          showToast('Отзыв опубликован');
+        } catch (err) {
+          showToast(err.message, false);
+        }
       }
     }
-    if (delId) {
-      if (!confirm('Удалить отзыв?')) return;
-      adminReviews = adminReviews.filter((x) => x.id !== delId);
+    if (delId && confirm('Удалить отзыв?')) {
       try {
-        await saveReviews(adminReviews);
+        if (isSupabaseConfigured()) await supabaseDeleteReview(delId);
+        await loadAdminData();
         renderReviewsTable();
         showToast('Отзыв удалён');
       } catch (err) {
@@ -298,18 +300,35 @@ function bindEvents() {
       }
     }
   });
+
+  $('#btn-import-json')?.addEventListener('click', async () => {
+    if (!confirm('Импортировать товары из catalog.json в Supabase?')) return;
+    try {
+      const catalog = await fetchJson('data/catalog.json');
+      for (const p of catalog) {
+        await supabaseSaveProduct(normalizeProduct(p));
+      }
+      await loadAdminData();
+      renderProductsTable();
+      showToast(`Импортировано ${catalog.length} товаров`);
+    } catch (err) {
+      showToast(err.message, false);
+    }
+  });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+  showSetupNotice();
   bindEvents();
-  if (isLoggedIn() && getGhToken()) {
-    verifyGhToken().then(async (user) => {
+  if (isSupabaseConfigured()) {
+    const session = await supabaseGetSession();
+    if (session) {
       $('#login-screen').classList.add('hidden');
       $('#admin-app').classList.remove('hidden');
-      $('#gh-user').textContent = `@${user}`;
+      $('#admin-user').textContent = session.user.email;
       await loadAdminData();
       renderProductsTable();
       renderReviewsTable();
-    }).catch(() => logout());
+    }
   }
 });
