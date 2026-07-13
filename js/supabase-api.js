@@ -1,20 +1,33 @@
-/* Supabase — каталог и отзывы (без GitHub Token) */
-let supabaseClient = null;
+/* Supabase — REST API (работает с publishable keys sb_publishable_...) */
+const SB_TOKEN_KEY = 'unorobe_access_token';
 
-function isSupabaseConfigured() {
-  const c = typeof UNOROBE_CONFIG !== 'undefined' ? UNOROBE_CONFIG.supabase : null;
-  return !!(c?.url && c?.anonKey && c.url.startsWith('http'));
+function sbConfig() {
+  return UNOROBE_CONFIG?.supabase || {};
 }
 
-function getSupabase() {
-  if (!isSupabaseConfigured()) return null;
-  if (!supabaseClient && window.supabase) {
-    supabaseClient = window.supabase.createClient(
-      UNOROBE_CONFIG.supabase.url,
-      UNOROBE_CONFIG.supabase.anonKey
-    );
+function isSupabaseConfigured() {
+  const c = sbConfig();
+  return !!(c.url && c.anonKey && c.url.startsWith('http'));
+}
+
+function sbAuthToken() {
+  return sessionStorage.getItem(SB_TOKEN_KEY) || sbConfig().anonKey;
+}
+
+async function sbFetch(path, options = {}) {
+  const cfg = sbConfig();
+  const headers = {
+    apikey: cfg.anonKey,
+    Authorization: `Bearer ${sbAuthToken()}`,
+    ...(options.headers || {}),
+  };
+  const res = await fetch(`${cfg.url}/rest/v1/${path}`, { ...options, headers });
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(err || `Supabase ${res.status}`);
   }
-  return supabaseClient;
+  if (res.status === 204) return null;
+  return res.json();
 }
 
 function dbProductToApp(row) {
@@ -58,22 +71,20 @@ function appProductToDb(p) {
 }
 
 async function supabaseLoadCatalog(includeHidden = false) {
-  const sb = getSupabase();
-  if (!sb) return null;
-  let q = sb.from('products').select('*').order('created_at', { ascending: false });
-  if (!includeHidden) q = q.eq('active', true);
-  const { data, error } = await q;
-  if (error) throw error;
+  if (!isSupabaseConfigured()) return null;
+  const path = includeHidden
+    ? 'products?select=*&order=created_at.desc'
+    : 'products?select=*&active=eq.true&order=created_at.desc';
+  const data = await sbFetch(path);
   return (data || []).map(dbProductToApp);
 }
 
 async function supabaseLoadReviews(includeHidden = false) {
-  const sb = getSupabase();
-  if (!sb) return null;
-  let q = sb.from('reviews').select('*').order('created_at', { ascending: false });
-  if (!includeHidden) q = q.eq('approved', true);
-  const { data, error } = await q;
-  if (error) throw error;
+  if (!isSupabaseConfigured()) return null;
+  const path = includeHidden
+    ? 'reviews?select=*&order=created_at.desc'
+    : 'reviews?select=*&approved=eq.true&order=created_at.desc';
+  const data = await sbFetch(path);
   return (data || []).map((r) => ({
     id: r.id,
     author: r.author,
@@ -84,74 +95,100 @@ async function supabaseLoadReviews(includeHidden = false) {
 }
 
 async function supabaseSaveProduct(product) {
-  const sb = getSupabase();
-  const { error } = await sb.from('products').upsert(appProductToDb(product));
-  if (error) throw error;
+  await sbFetch('products', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Prefer: 'resolution=merge-duplicates' },
+    body: JSON.stringify(appProductToDb(product)),
+  });
 }
 
 async function supabaseDeleteProduct(id) {
-  const sb = getSupabase();
-  const { error } = await sb.from('products').update({ active: false }).eq('id', id);
-  if (error) throw error;
+  await sbFetch(`products?id=eq.${encodeURIComponent(id)}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ active: false }),
+  });
 }
 
 async function supabaseSaveReview(review) {
-  const sb = getSupabase();
-  const { error } = await sb.from('reviews').upsert({
-    id: review.id,
-    author: review.author,
-    text: review.text,
-    rating: review.rating || 5,
-    approved: !!review.approved,
+  await sbFetch('reviews', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Prefer: 'resolution=merge-duplicates' },
+    body: JSON.stringify({
+      id: review.id,
+      author: review.author,
+      text: review.text,
+      rating: review.rating || 5,
+      approved: !!review.approved,
+    }),
   });
-  if (error) throw error;
 }
 
 async function supabaseDeleteReview(id) {
-  const sb = getSupabase();
-  const { error } = await sb.from('reviews').delete().eq('id', id);
-  if (error) throw error;
+  await sbFetch(`reviews?id=eq.${encodeURIComponent(id)}`, { method: 'DELETE' });
 }
 
 async function supabaseUploadImage(file, productId) {
-  const sb = getSupabase();
+  const cfg = sbConfig();
   const ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
   const path = `${productId}.${ext}`;
-  const { error } = await sb.storage.from('products').upload(path, file, { upsert: true });
-  if (error) throw error;
-  const { data } = sb.storage.from('products').getPublicUrl(path);
-  return data.publicUrl;
+  const res = await fetch(`${cfg.url}/storage/v1/object/products/${path}`, {
+    method: 'POST',
+    headers: {
+      apikey: cfg.anonKey,
+      Authorization: `Bearer ${sbAuthToken()}`,
+      'Content-Type': file.type || 'image/jpeg',
+      'x-upsert': 'true',
+    },
+    body: file,
+  });
+  if (!res.ok) throw new Error(await res.text());
+  return `${cfg.url}/storage/v1/object/public/products/${path}`;
 }
 
 async function supabaseSignIn(email, password) {
-  const sb = getSupabase();
-  const { data, error } = await sb.auth.signInWithPassword({ email, password });
-  if (error) throw error;
+  const cfg = sbConfig();
+  const res = await fetch(`${cfg.url}/auth/v1/token?grant_type=password`, {
+    method: 'POST',
+    headers: { apikey: cfg.anonKey, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password }),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error_description || data.msg || 'Invalid login credentials');
+  sessionStorage.setItem(SB_TOKEN_KEY, data.access_token);
   return data.user;
 }
 
 async function supabaseSignOut() {
-  const sb = getSupabase();
-  if (sb) await sb.auth.signOut();
+  sessionStorage.removeItem(SB_TOKEN_KEY);
 }
 
 async function supabaseGetSession() {
-  const sb = getSupabase();
-  if (!sb) return null;
-  const { data } = await sb.auth.getSession();
-  return data.session;
+  const token = sessionStorage.getItem(SB_TOKEN_KEY);
+  if (!token) return null;
+  const cfg = sbConfig();
+  const res = await fetch(`${cfg.url}/auth/v1/user`, {
+    headers: { apikey: cfg.anonKey, Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) {
+    sessionStorage.removeItem(SB_TOKEN_KEY);
+    return null;
+  }
+  const user = await res.json();
+  return { user, access_token: token };
 }
 
 async function supabaseSubmitPublicReview(review) {
-  const sb = getSupabase();
-  if (!sb) return false;
-  const { error } = await sb.from('reviews').insert({
-    id: review.id,
-    author: review.author,
-    text: review.text,
-    rating: review.rating || 5,
-    approved: false,
+  await sbFetch('reviews', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      id: review.id,
+      author: review.author,
+      text: review.text,
+      rating: review.rating || 5,
+      approved: false,
+    }),
   });
-  if (error) throw error;
   return true;
 }
