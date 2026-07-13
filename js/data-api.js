@@ -11,13 +11,16 @@ let REVIEWS = [];
 
 const CATALOG_CACHE_KEY = 'unorobe_catalog_v1';
 const REVIEWS_CACHE_KEY = 'unorobe_reviews_v1';
-const CACHE_TTL_MS = 15 * 60 * 1000;
+const CATALOG_VERSION_KEY = 'unorobe_catalog_ver';
+const CACHE_TTL_MS = 2 * 60 * 1000;
 
 function readCache(key) {
   try {
     const raw = localStorage.getItem(key);
     if (!raw) return null;
-    const { ts, data } = JSON.parse(raw);
+    const { ts, data, ver } = JSON.parse(raw);
+    const currentVer = localStorage.getItem(CATALOG_VERSION_KEY) || '0';
+    if (key === CATALOG_CACHE_KEY && ver && ver !== currentVer) return null;
     if (!data || Date.now() - ts > CACHE_TTL_MS) return null;
     return data;
   } catch (e) {
@@ -27,8 +30,18 @@ function readCache(key) {
 
 function writeCache(key, data) {
   try {
-    localStorage.setItem(key, JSON.stringify({ ts: Date.now(), data }));
+    const payload = { ts: Date.now(), data };
+    if (key === CATALOG_CACHE_KEY) {
+      payload.ver = localStorage.getItem(CATALOG_VERSION_KEY) || String(Date.now());
+    }
+    localStorage.setItem(key, JSON.stringify(payload));
   } catch (e) { /* quota */ }
+}
+
+function bumpCatalogVersion() {
+  const ver = String(Date.now());
+  try { localStorage.setItem(CATALOG_VERSION_KEY, ver); } catch (e) { /* ignore */ }
+  return ver;
 }
 
 function applyCachedCatalog() {
@@ -107,27 +120,22 @@ async function parseJsonResponse(res) {
 }
 
 async function loadCatalog() {
-  const tasks = [];
-
   if (isSupabaseConfigured()) {
-    tasks.push(
-      supabaseLoadCatalog().then((data) => {
-        if (data?.length) return data;
-        throw new Error('Supabase catalog empty');
-      })
-    );
+    try {
+      const data = await supabaseLoadCatalog();
+      if (data?.length) {
+        PRODUCTS = data;
+        writeCache(CATALOG_CACHE_KEY, data);
+        return PRODUCTS;
+      }
+    } catch (e) {
+      console.warn('Supabase catalog fallback:', e.message);
+    }
   }
 
-  tasks.push(
-    fetchJson('data/catalog.json').then((data) => {
-      const items = data.filter((p) => p.active !== false).map(normalizeProduct);
-      if (items.length) return items;
-      throw new Error('Local catalog empty');
-    })
-  );
-
   try {
-    PRODUCTS = await Promise.any(tasks);
+    const data = await fetchJson('data/catalog.json');
+    PRODUCTS = data.filter((p) => p.active !== false).map(normalizeProduct);
     writeCache(CATALOG_CACHE_KEY, PRODUCTS);
     return PRODUCTS;
   } catch (e) {

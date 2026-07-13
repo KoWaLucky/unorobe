@@ -274,7 +274,8 @@ function bindEvents() {
     btn.textContent = 'Сохранение…';
     try {
       await saveProduct(item);
-      try { localStorage.removeItem('unorobe_catalog_v1'); } catch (err) { /* ignore */ }
+      bumpCatalogVersion();
+      try { localStorage.removeItem(CATALOG_CACHE_KEY); } catch (err) { /* ignore */ }
       $('#product-form').classList.remove('open');
       editingProductId = null;
       showToast('Товар сохранён — уже на сайте');
@@ -311,6 +312,8 @@ function bindEvents() {
     if (hideId && confirm('Скрыть товар с сайта? Его можно будет вернуть во вкладке «Скрытые».')) {
       try {
         if (isSupabaseConfigured()) await supabaseHideProduct(hideId);
+        bumpCatalogVersion();
+        try { localStorage.removeItem(CATALOG_CACHE_KEY); } catch (err) { /* ignore */ }
         await loadAdminData();
         renderProductsTable();
         showToast('Товар скрыт с сайта');
@@ -322,6 +325,8 @@ function bindEvents() {
     if (showId) {
       try {
         if (isSupabaseConfigured()) await supabaseShowProduct(showId);
+        bumpCatalogVersion();
+        try { localStorage.removeItem(CATALOG_CACHE_KEY); } catch (err) { /* ignore */ }
         await loadAdminData();
         productFilter = 'active';
         renderProductsTable();
@@ -334,6 +339,8 @@ function bindEvents() {
     if (hardDelId && confirm('Удалить товар навсегда? Это действие нельзя отменить.')) {
       try {
         if (isSupabaseConfigured()) await supabaseHardDeleteProduct(hardDelId);
+        bumpCatalogVersion();
+        try { localStorage.removeItem(CATALOG_CACHE_KEY); } catch (err) { /* ignore */ }
         await loadAdminData();
         renderProductsTable();
         if (editingProductId === hardDelId) $('#product-form').classList.remove('open');
