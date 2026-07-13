@@ -26,8 +26,14 @@ async function sbFetch(path, options = {}) {
     const err = await res.text();
     throw new Error(err || `Supabase ${res.status}`);
   }
-  if (res.status === 204) return null;
-  return res.json();
+  if (res.status === 204 || res.status === 205) return null;
+  const text = await res.text();
+  if (!text.trim()) return null;
+  try {
+    return JSON.parse(text);
+  } catch (e) {
+    throw new Error('Некорректный ответ Supabase');
+  }
 }
 
 function dbProductToApp(row) {
@@ -95,9 +101,12 @@ async function supabaseLoadReviews(includeHidden = false) {
 }
 
 async function supabaseSaveProduct(product) {
-  await sbFetch('products', {
+  await sbFetch('products?on_conflict=id', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', Prefer: 'resolution=merge-duplicates' },
+    headers: {
+      'Content-Type': 'application/json',
+      Prefer: 'resolution=merge-duplicates,return=minimal',
+    },
     body: JSON.stringify(appProductToDb(product)),
   });
 }
@@ -128,9 +137,12 @@ async function supabaseDeleteProduct(id) {
 }
 
 async function supabaseSaveReview(review) {
-  await sbFetch('reviews', {
+  await sbFetch('reviews?on_conflict=id', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', Prefer: 'resolution=merge-duplicates' },
+    headers: {
+      'Content-Type': 'application/json',
+      Prefer: 'resolution=merge-duplicates,return=minimal',
+    },
     body: JSON.stringify({
       id: review.id,
       author: review.author,

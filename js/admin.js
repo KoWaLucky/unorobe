@@ -258,6 +258,7 @@ function bindEvents() {
     const item = readProductForm();
     try {
       await saveProduct(item);
+      try { localStorage.removeItem('unorobe_catalog_v1'); } catch (e) { /* ignore */ }
       await loadAdminData();
       renderProductsTable();
       $('#product-form').classList.remove('open');
