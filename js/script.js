@@ -140,32 +140,33 @@
 
 
 
-      // product single page
-      var thumb_slider = new Swiper(".product-thumbnail-slider", {
-        loop: true,
-        slidesPerView: 3,
-        autoplay: true,
-        direction: "vertical",
-        spaceBetween: 15,
-      });
-  
-      var large_slider = new Swiper(".product-large-slider", {
-        loop: true,
-        slidesPerView: 1,
-        autoplay: true,
-        effect: 'fade',
-        thumbs: {
-          swiper: thumb_slider,
-        },
-      });
-  
-      window.addEventListener("load", (event) => {
-  
-        var $grid = $('.entry-container').isotope({
-          itemSelector: '.entry-item',
-          layoutMode: 'masonry'
+      if (document.querySelector('.product-thumbnail-slider') && document.querySelector('.product-large-slider')) {
+        var thumb_slider = new Swiper(".product-thumbnail-slider", {
+          loop: true,
+          slidesPerView: 3,
+          autoplay: true,
+          direction: "vertical",
+          spaceBetween: 15,
         });
-  
+
+        new Swiper(".product-large-slider", {
+          loop: true,
+          slidesPerView: 1,
+          autoplay: true,
+          effect: 'fade',
+          thumbs: {
+            swiper: thumb_slider,
+          },
+        });
+      }
+
+      window.addEventListener("load", () => {
+        if ($('.entry-container').length) {
+          $('.entry-container').isotope({
+            itemSelector: '.entry-item',
+            layoutMode: 'masonry',
+          });
+        }
       });
   
   

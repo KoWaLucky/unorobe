@@ -450,6 +450,7 @@ function initReviewForm() {
   });
 }
 
+function initSingleProductPage() {
   const params = new URLSearchParams(window.location.search);
   const product = getProductById(params.get('id'));
   if (!product) return;
@@ -540,8 +541,15 @@ function initHeaderScroll() {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
-  await loadCatalog();
-  await loadReviews();
+  try {
+    await loadCatalog();
+    await loadReviews();
+  } catch (e) {
+    console.error('UNO RÓBE data load failed:', e);
+    if (!PRODUCTS.length && typeof window.PRODUCTS_STATIC !== 'undefined') {
+      PRODUCTS = window.PRODUCTS_STATIC.map(normalizeProduct);
+    }
+  }
   initHomeSwiperProducts();
   initShopPage();
   initSingleProductPage();
